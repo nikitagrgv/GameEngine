@@ -1,37 +1,44 @@
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-int main(void)
+#include <iostream>
+
+using namespace std;
+
+int main()
 {
-    GLFWwindow* window;
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+	constexpr int window_width = 800;
+	constexpr int window_height = 600;
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
+	GLFWwindow *window = glfwCreateWindow(window_width, window_height, "Window", nullptr, nullptr);
+	glfwMakeContextCurrent(window);
 
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
+	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+	glViewport(0, 0, window_width, window_height);
 
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+	glClearColor(0.5, 0.2, 0.3, 1);
 
-        /* Poll for and process events */
-        glfwPollEvents();
-    }
+	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height){
+		glViewport(0, 0, width, height);
+	});
 
-    glfwTerminate();
-    return 0;
+	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+		cout << "key: " << key << " scancode: " << scancode << " action: " << action << " modes: " << mods << endl;
+	});
+
+	while (!glfwWindowShouldClose(window))
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	glfwTerminate();
+	return 0;
 }
