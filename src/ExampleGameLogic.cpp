@@ -89,6 +89,7 @@ void ExampleGameLogic::shutdown()
 {
 	glDeleteVertexArrays(1, &vao_);
 	glDeleteBuffers(1, &vbo_);
+	glDeleteBuffers(1, &ebo_);
 	glDeleteProgram(shader_program_);
 }
 
