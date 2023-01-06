@@ -41,16 +41,14 @@ void ExampleGameLogic::init()
 
 
 	// ------------------------- BUFFERS ------------------
-	// create vao_
+	// create VAO and VBO
 	glGenVertexArrays(1, &vao_);
-
-	// use aur vao_ now
-	glBindVertexArray(vao_);
-
-	// create VBO
 	glGenBuffers(1, &vbo_);
 
-	// use our vbo now
+	// use our VAO now
+	glBindVertexArray(vao_);
+
+	// use our VBO now
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_);
 
 	// copy vertices data to vbo buffer
@@ -75,10 +73,11 @@ void ExampleGameLogic::update()
 		Engine::shutdownLater();
 }
 
-
 void ExampleGameLogic::shutdown()
 {
-
+	glDeleteVertexArrays(1, &vao_);
+	glDeleteBuffers(1, &vbo_);
+	glDeleteProgram(shader_program_);
 }
 
 unsigned int ExampleGameLogic::create_shader_program(unsigned int vertex_shader,

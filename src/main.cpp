@@ -12,14 +12,6 @@ int main()
 
 	Engine::run();
 
-
-
-//	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-//		cout << "key: " << key << " scancode: " << scancode << " action: " << action << " modes: " << mods << endl;
-//	});
-//
-
-
 	return 0;
 }
 
