@@ -70,6 +70,16 @@ void ExampleGameLogic::init()
 	glBindVertexArray(0);
 	// unbind EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	// CONTROLS CALLBACKS
+	Input::addKeyPressedCallback(GLFW_KEY_1, [](){ std::cout << "1 PRESSED\n"; });
+	Input::addKeyReleasedCallback(GLFW_KEY_1, [](){ std::cout << "1 RELEASED\n"; });
+
+	Input::addKeyPressedCallback(GLFW_KEY_W, [](){ std::cout << "W PRESSED\n"; });
+	Input::addKeyReleasedCallback(GLFW_KEY_W, [](){ std::cout << "W RELEASED\n"; });
+
+	Input::addKeyPressedCallback(GLFW_KEY_LEFT_ALT, [](){ std::cout << "ALT PRESSED\n"; });
+	Input::addKeyReleasedCallback(GLFW_KEY_LEFT_ALT, [](){ std::cout << "ALT RELEASED\n"; });
 }
 
 void ExampleGameLogic::render()
