@@ -18,12 +18,19 @@ private:
 	unsigned int create_shader_program(unsigned int vertex_shader, unsigned int fragment_shader) const;
 
 private:
-	const float vertices_[9] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f,  0.5f, 0.0f
+	const float vertices_[12] = {
+		0.5f, 0.5f, 0.0f,   // top right
+		0.5f, -0.5f, 0.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f, // bottom left
+		-0.5f, 0.5f, 0.0f   // top left
 	};
 
+	const unsigned int indices_[6] = {
+		0, 1, 3, // first triangle
+		1, 2, 3  // second triangle
+	};
+
+	unsigned int ebo_;
 	unsigned int vao_;
 	unsigned int vbo_;
 	unsigned int shader_program_;

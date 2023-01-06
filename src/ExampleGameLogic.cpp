@@ -44,27 +44,39 @@ void ExampleGameLogic::init()
 	// create VAO and VBO
 	glGenVertexArrays(1, &vao_);
 	glGenBuffers(1, &vbo_);
+	glGenBuffers(1, &ebo_);
 
 	// use our VAO now
 	glBindVertexArray(vao_);
 
 	// use our VBO now
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-
 	// copy vertices data to vbo buffer
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_), vertices_, GL_STATIC_DRAW);
+
+	// use our EBO now
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
+	// copy indices to EBO
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices_), &indices_, GL_STATIC_DRAW);
 
 	// set vertex attribute 0 pointer
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 	// enable attribute 0
 	glEnableVertexAttribArray(0);
+
+	// unbind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	// unbind VAO
+	glBindVertexArray(0);
+	// unbind EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void ExampleGameLogic::render()
 {
 	glUseProgram(shader_program_);
 	glBindVertexArray(vao_);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
 void ExampleGameLogic::update()
