@@ -23,13 +23,13 @@ void Engine::init(const char *name, int width, int height)
 	});
 
 	Input::get().init();
-
-	for (auto *game : get().game_logics_)
-		game->init();
 }
 
 void Engine::run()
 {
+	for (auto *game : get().game_logics_)
+		game->init();
+
 	get().time_ = glfwGetTime();
 	while (!glfwWindowShouldClose(get().glfw_window_))
 	{
