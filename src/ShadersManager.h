@@ -27,6 +27,8 @@ public:
 	void deleteAllFragmentShaders();
 	void deleteAllShaders();
 	void deleteAllPrograms();
+	void deleteAll();
+
 private:
 	unsigned int create_shader(const char *source, int type);
 

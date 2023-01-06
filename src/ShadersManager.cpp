@@ -8,6 +8,11 @@
 
 ShadersManager::~ShadersManager()
 {
+	deleteAll();
+}
+
+void ShadersManager::deleteAll()
+{
 	deleteAllShaders();
 	deleteAllPrograms();
 }
