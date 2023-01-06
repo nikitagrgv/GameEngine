@@ -9,17 +9,7 @@ void ExampleGameLogic::init()
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-	const float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f,  0.5f, 0.0f
-	};
-
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	// ----------------- SHADERS --------------------------
 
 	const char *const vertex_shader_source = R"(
 		#version 330 core
@@ -43,14 +33,52 @@ void ExampleGameLogic::init()
 
 	unsigned int vertex_shader = create_vertex_shader(vertex_shader_source);
 	unsigned int fragment_shader = create_fragment_shader(fragment_shader_source);
-	unsigned int shader_program = create_shader_program(vertex_shader, fragment_shader);
+	shader_program_ = create_shader_program(vertex_shader, fragment_shader);
 
 	// delete shaders
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 
-	// TODO move?
-	glUseProgram(shader_program);
+
+	// ------------------------- BUFFERS ------------------
+	// create vao_
+	glGenVertexArrays(1, &vao_);
+
+	// use aur vao_ now
+	glBindVertexArray(vao_);
+
+	// create VBO
+	glGenBuffers(1, &vbo_);
+
+	// use our vbo now
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+
+	// copy vertices data to vbo buffer
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_), vertices_, GL_STATIC_DRAW);
+
+	// set vertex attribute 0 pointer
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+	// enable attribute 0
+	glEnableVertexAttribArray(0);
+}
+
+void ExampleGameLogic::render()
+{
+	glUseProgram(shader_program_);
+	glBindVertexArray(vao_);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+void ExampleGameLogic::update()
+{
+	if (Input::isKeyDown(GLFW_KEY_ESCAPE))
+		Engine::shutdownLater();
+}
+
+
+void ExampleGameLogic::shutdown()
+{
+
 }
 
 unsigned int ExampleGameLogic::create_shader_program(unsigned int vertex_shader,
@@ -114,20 +142,4 @@ void ExampleGameLogic::check_shader_linking(unsigned int program_id) const
 		glGetProgramInfoLog(program_id, 512, nullptr, info_log);
 		std::cout << "LINKING COMPILATION ERROR:\n" << info_log << std::endl;
 	}
-}
-
-
-void ExampleGameLogic::update()
-{
-	if (Input::isKeyDown(GLFW_KEY_ESCAPE))
-		Engine::shutdownLater();
-}
-
-void ExampleGameLogic::render()
-{
-
-}
-void ExampleGameLogic::shutdown()
-{
-
 }
