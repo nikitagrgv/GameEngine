@@ -12,6 +12,9 @@ public:
 	void shutdown() override;
 
 private:
+	void compile_shaders();
+
+private:
 	ShadersManager shaders_manager_;
 
 	bool wireframe_mode_ = false;

@@ -2,6 +2,7 @@
 
 #include "Engine.h"
 #include "Input.h"
+#include "FileManager.h"
 
 #include <iostream>
 
@@ -9,31 +10,20 @@ void ExampleGameLogic::init()
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-	// ----------------- SHADERS --------------------------
+	compile_shaders();
 
-	const char *const vertex_shader_source = R"(
-		#version 330 core
-		layout (location = 0) in vec3 aPos;
+	// CONTROLS CALLBACKS
+	Input::addKeyPressedCallback(GLFW_KEY_Q, [this](){
+		wireframe_mode_ = !wireframe_mode_;
+		std::cout << "Wireframe mode: " << wireframe_mode_ << std::endl;
 
-		void main()
-		{
-			gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-		}
-		)";
+		glPolygonMode(GL_FRONT_AND_BACK, wireframe_mode_ ? GL_LINE : GL_FILL);
+	});
 
-	const char *const fragment_shader_source = R"(
-		#version 330 core
-		out vec4 FragColor;
-
-		void main()
-		{
-		FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-		}
-		)";
-
-	unsigned int vertex_shader = shaders_manager_.createVertexShader(vertex_shader_source);
-	unsigned int fragment_shader = shaders_manager_.createFragmentShader(fragment_shader_source);
-	shader_program_ = shaders_manager_.createProgram(vertex_shader, fragment_shader, true);
+	Input::addKeyPressedCallback(GLFW_KEY_R, [this](){
+		std::cout << "Recompile all shaders..." << std::endl;
+		compile_shaders();
+	});
 
 	// ------------------------- BUFFERS ------------------
 	// create VAO and VBO
@@ -65,14 +55,6 @@ void ExampleGameLogic::init()
 	glBindVertexArray(0);
 	// unbind EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	// CONTROLS CALLBACKS
-	Input::addKeyPressedCallback(GLFW_KEY_Q, [this](){
-		wireframe_mode_ = !wireframe_mode_;
-		std::cout << "Wireframe mode: " << wireframe_mode_ << std::endl;
-
-		glPolygonMode(GL_FRONT_AND_BACK, wireframe_mode_ ? GL_LINE : GL_FILL);
-	});
 }
 
 void ExampleGameLogic::render()
@@ -93,4 +75,16 @@ void ExampleGameLogic::shutdown()
 	glDeleteVertexArrays(1, &vao_);
 	glDeleteBuffers(1, &vbo_);
 	glDeleteBuffers(1, &ebo_);
+}
+
+void ExampleGameLogic::compile_shaders()
+{
+	shaders_manager_.deleteAll();
+
+	std::string vertex_shader_source = FileManager::getFileText("../shaders/simple.vert");
+	std::string fragment_shader_source = FileManager::getFileText("../shaders/simple.frag");
+
+	unsigned int vertex_shader = shaders_manager_.createVertexShader(vertex_shader_source.c_str());
+	unsigned int fragment_shader = shaders_manager_.createFragmentShader(fragment_shader_source.c_str());
+	shader_program_ = shaders_manager_.createProgram(vertex_shader, fragment_shader, true);
 }
