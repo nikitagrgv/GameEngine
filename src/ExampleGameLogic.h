@@ -18,6 +18,8 @@ private:
 	unsigned int create_shader_program(unsigned int vertex_shader, unsigned int fragment_shader) const;
 
 private:
+	bool wireframe_mode_ = false;
+
 	const float vertices_[12] = {
 		0.5f, 0.5f, 0.0f,   // top right
 		0.5f, -0.5f, 0.0f,  // bottom right
@@ -30,8 +32,8 @@ private:
 		1, 2, 3  // second triangle
 	};
 
-	unsigned int ebo_;
-	unsigned int vao_;
-	unsigned int vbo_;
-	unsigned int shader_program_;
+	unsigned int ebo_ = 0;
+	unsigned int vao_ = 0;
+	unsigned int vbo_ = 0;
+	unsigned int shader_program_ = 0;
 };
