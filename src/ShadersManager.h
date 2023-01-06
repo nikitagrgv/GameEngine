@@ -18,11 +18,15 @@ public:
 	unsigned int createProgram(
 		unsigned int vertex_shader,
 		unsigned int fragment_shader,
-		bool delete_shaders = true);
+		bool delete_shaders);
 
 	void deleteShader(unsigned int id);
 	void deleteProgram(unsigned int id);
 
+	void deleteAllVertexShaders();
+	void deleteAllFragmentShaders();
+	void deleteAllShaders();
+	void deleteAllPrograms();
 private:
 	unsigned int create_shader(const char *source, int type);
 

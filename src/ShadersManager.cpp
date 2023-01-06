@@ -8,15 +8,8 @@
 
 ShadersManager::~ShadersManager()
 {
-	for (const unsigned int id : vertex_shaders_)
-		glDeleteShader(id);
-
-	for (const unsigned int id : fragment_shaders_)
-		glDeleteShader(id);
-
-	for (const unsigned int id : programs_)
-		glDeleteProgram(id);
-
+	deleteAllShaders();
+	deleteAllPrograms();
 }
 
 void ShadersManager::deleteShader(unsigned int id)
@@ -189,4 +182,31 @@ bool ShadersManager::check_shader_linking(unsigned int program_id)
 	}
 
 	return success;
+}
+
+void ShadersManager::deleteAllShaders()
+{
+	deleteAllVertexShaders();
+	deleteAllFragmentShaders();
+}
+
+void ShadersManager::deleteAllFragmentShaders()
+{
+	for (const unsigned int id : fragment_shaders_)
+		glDeleteShader(id);
+	fragment_shaders_.clear();
+}
+
+void ShadersManager::deleteAllVertexShaders()
+{
+	for (const unsigned int id : vertex_shaders_)
+		glDeleteShader(id);
+	vertex_shaders_.clear();
+}
+
+void ShadersManager::deleteAllPrograms()
+{
+	for (const unsigned int id : programs_)
+		glDeleteProgram(id);
+	programs_.clear();
 }
