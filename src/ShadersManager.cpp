@@ -23,6 +23,8 @@ void ShadersManager::deleteShader(unsigned int id)
 {
 	assert(has_shader(id));
 
+	glDeleteShader(id);
+
 	for (int i = 0; i < vertex_shaders_.size(); i++)
 	{
 		if (vertex_shaders_[i] == id)
@@ -140,6 +142,9 @@ unsigned int ShadersManager::createProgram(
 	unsigned int fragment_shader,
 	bool delete_shaders)
 {
+	assert(vertex_shader == 0 || has_shader(vertex_shader));
+	assert(fragment_shader == 0 || has_shader(fragment_shader));
+
 	unsigned int shader_program;
 	shader_program = glCreateProgram();
 
