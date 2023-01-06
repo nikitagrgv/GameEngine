@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include "GameLogic.h"
+#include "Input.h"
 
 #include <algorithm>
 
@@ -11,37 +12,39 @@ void Engine::init(const char *name, int width, int height)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	glfw_window_ = glfwCreateWindow(width, height, name, nullptr, nullptr);
-	glfwMakeContextCurrent(glfw_window_);
+	get().glfw_window_ = glfwCreateWindow(width, height, name, nullptr, nullptr);
+	glfwMakeContextCurrent(get().glfw_window_);
 
 	gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-	update_viewport_size(width, height);
-	glfwSetFramebufferSizeCallback(glfw_window_, [](GLFWwindow* window, int width, int height){
+	get().update_viewport_size(width, height);
+	glfwSetFramebufferSizeCallback(get().glfw_window_, [](GLFWwindow* window, int width, int height){
 		Engine::get().update_viewport_size(width, height);
 	});
 
-	for (auto *game : game_logics_)
+	Input::get().init();
+
+	for (auto *game : get().game_logics_)
 		game->init();
 }
 
 void Engine::run()
 {
-	time_ = glfwGetTime();
-	while (!glfwWindowShouldClose(glfw_window_))
+	get().time_ = glfwGetTime();
+	while (!glfwWindowShouldClose(get().glfw_window_))
 	{
 		double current_time = glfwGetTime();
-		delta_time_ = current_time - time_;
-		time_ = current_time;
+		get().delta_time_ = current_time - get().time_;
+		get().time_ = current_time;
 
-		update();
-		render();
-		swap();
+		get().update();
+		get().render();
+		get().swap();
 
 		glfwPollEvents();
 	}
 
-	shutdown();
+	get().shutdown();
 }
 
 void Engine::update_viewport_size(int width, int height) const
@@ -57,29 +60,33 @@ Engine &Engine::get()
 
 void Engine::addGameLogic(GameLogic *game_logic)
 {
-	game_logics_.push_back(game_logic);
+	get().game_logics_.push_back(game_logic);
 }
 
 void Engine::removeGameLogic(GameLogic *game_logic)
 {
-	const auto iterator = std::find(game_logics_.begin(), game_logics_.end(), game_logic);
-	if (iterator != game_logics_.end())
-		game_logics_.erase(iterator);
+	const auto iterator = std::find(
+		get().game_logics_.begin(),
+		get().game_logics_.end(),
+		game_logic);
+
+	if (iterator != get().game_logics_.end())
+		get().game_logics_.erase(iterator);
 }
 
-double Engine::getTime() const
+double Engine::getTime()
 {
-	return time_;
+	return get().time_;
 }
 
-double Engine::getDelta() const
+double Engine::getDelta()
 {
-	return delta_time_;
+	return get().delta_time_;
 }
 
 void Engine::shutdownLater()
 {
-	glfwSetWindowShouldClose(glfw_window_, true);
+	glfwSetWindowShouldClose(get().glfw_window_, true);
 }
 
 void Engine::update()

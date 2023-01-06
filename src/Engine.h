@@ -7,21 +7,24 @@
 #include <vector>
 
 class GameLogic;
+class Input;
 
 class Engine final
 {
+	friend class Input;
+
 public:
 	static Engine &get();
 
-	void init(const char *name, int width, int height);
-	void run();
-	void shutdownLater();
+	static void init(const char *name, int width, int height);
+	static void run();
+	static void shutdownLater();
 
-	void addGameLogic(GameLogic *game_logic);
-	void removeGameLogic(GameLogic *game_logic);
+	static void addGameLogic(GameLogic *game_logic);
+	static void removeGameLogic(GameLogic *game_logic);
 
-	double getTime() const;
-	double getDelta() const;
+	static double getTime();
+	static double getDelta();
 
 private:
 	Engine() = default;
