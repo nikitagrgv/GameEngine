@@ -59,7 +59,11 @@ void ExampleGameLogic::init()
 
 void ExampleGameLogic::render()
 {
+	int uniform_time_location = glGetUniformLocation(shader_program_, "time");
+
 	glUseProgram(shader_program_);
+	glUniform1f(uniform_time_location, (float)Engine::getTime());
+
 	glBindVertexArray(vao_);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
@@ -81,8 +85,8 @@ void ExampleGameLogic::compile_shaders()
 {
 	shaders_manager_.deleteAll();
 
-	std::string vertex_shader_source = FileManager::getFileText("../shaders/simple.vert");
-	std::string fragment_shader_source = FileManager::getFileText("../shaders/simple.frag");
+	std::string vertex_shader_source = FileManager::getFileText("../shaders/vertex_shader.vert");
+	std::string fragment_shader_source = FileManager::getFileText("../shaders/fragment_shader.frag");
 
 	unsigned int vertex_shader = shaders_manager_.createVertexShader(vertex_shader_source.c_str());
 	unsigned int fragment_shader = shaders_manager_.createFragmentShader(fragment_shader_source.c_str());
