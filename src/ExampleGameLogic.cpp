@@ -31,14 +31,9 @@ void ExampleGameLogic::init()
 		}
 		)";
 
-	unsigned int vertex_shader = create_vertex_shader(vertex_shader_source);
-	unsigned int fragment_shader = create_fragment_shader(fragment_shader_source);
-	shader_program_ = create_shader_program(vertex_shader, fragment_shader);
-
-	// delete shaders
-	glDeleteShader(vertex_shader);
-	glDeleteShader(fragment_shader);
-
+	unsigned int vertex_shader = shaders_manager_.createVertexShader(vertex_shader_source);
+	unsigned int fragment_shader = shaders_manager_.createFragmentShader(fragment_shader_source);
+	shader_program_ = shaders_manager_.createProgram(vertex_shader, fragment_shader, true);
 
 	// ------------------------- BUFFERS ------------------
 	// create VAO and VBO
@@ -99,67 +94,4 @@ void ExampleGameLogic::shutdown()
 	glDeleteBuffers(1, &vbo_);
 	glDeleteBuffers(1, &ebo_);
 	glDeleteProgram(shader_program_);
-}
-
-unsigned int ExampleGameLogic::create_shader_program(unsigned int vertex_shader,
-	unsigned int fragment_shader) const
-{
-	unsigned int shader_program;
-	shader_program = glCreateProgram();
-	glAttachShader(shader_program, vertex_shader);
-	glAttachShader(shader_program, fragment_shader);
-	glLinkProgram(shader_program);
-
-	check_shader_linking(shader_program);
-
-	return shader_program;
-}
-
-unsigned int ExampleGameLogic::create_vertex_shader(const char *const vertex_shader_source) const
-{
-	unsigned int vertex_shader;
-	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertex_shader, 1, &vertex_shader_source, nullptr);
-	glCompileShader(vertex_shader);
-
-	check_shader_compilation(vertex_shader);
-
-	return vertex_shader;
-}
-
-unsigned int ExampleGameLogic::create_fragment_shader(
-	const char *const fragment_shader_source) const
-{
-	unsigned int fragment_shader;
-	fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragment_shader, 1, &fragment_shader_source, nullptr);
-	glCompileShader(fragment_shader);
-
-	check_shader_compilation(fragment_shader);
-
-	return fragment_shader;
-}
-
-void ExampleGameLogic::check_shader_compilation(unsigned int shader_id) const
-{
-	int success;
-	glGetShaderiv(shader_id, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		char info_log[512];
-		glGetShaderInfoLog(shader_id, 512, nullptr, info_log);
-		std::cout << "SHADER COMPILATION ERROR:\n" << info_log << std::endl;
-	}
-}
-
-void ExampleGameLogic::check_shader_linking(unsigned int program_id) const
-{
-	int success;
-	glGetProgramiv(program_id, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		char info_log[512];
-		glGetProgramInfoLog(program_id, 512, nullptr, info_log);
-		std::cout << "LINKING COMPILATION ERROR:\n" << info_log << std::endl;
-	}
 }

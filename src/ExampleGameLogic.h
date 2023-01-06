@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameLogic.h"
+#include "ShadersManager.h"
 
 class ExampleGameLogic final : public GameLogic
 {
@@ -11,13 +12,8 @@ public:
 	void shutdown() override;
 
 private:
-	void check_shader_compilation(unsigned int shader_id) const;
-	void check_shader_linking(unsigned int program_id) const;
-	unsigned int create_vertex_shader(const char *vertex_shader_source) const;
-	unsigned int create_fragment_shader(const char *fragment_shader_source) const;
-	unsigned int create_shader_program(unsigned int vertex_shader, unsigned int fragment_shader) const;
+	ShadersManager shaders_manager_;
 
-private:
 	bool wireframe_mode_ = false;
 
 	const float vertices_[12] = {

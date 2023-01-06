@@ -28,7 +28,6 @@ private:
 	int generate_id() const;
 	bool has_id(int id) const;
 
-
 private:
 	GLFWwindow *glfw_window_{nullptr};
 
