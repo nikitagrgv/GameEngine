@@ -19,11 +19,14 @@ private:
 
 	bool wireframe_mode_ = false;
 
-	const float vertices_[24] = {
-		0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // top right
-		0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
-		-0.5f, 0.5f, 0.0f, 0.8f, 0.1f, 0.8f   // top left
+	unsigned int texture_;
+	unsigned int texture2_;
+
+	const float vertices_[4 * (3 + 3 + 2)] = {
+		/*pos*/ 0.5f, 0.5f, 0.0f, /*col*/ 1.0f, 0.0f, 0.0f, /*tex*/ 1.0f, 1.0f,   // top right
+		/*pos*/ 0.5f, -0.5f, 0.0f, /*col*/ 0.0f, 1.0f, 0.0f, /*tex*/ 1.0f, 0.0f,  // bottom right
+		/*pos*/ -0.5f, -0.5f, 0.0f, /*col*/ 0.0f, 0.0f, 1.0f, /*tex*/ 0.0f, 0.0f, // bottom left
+		/*pos*/ -0.5f, 0.5f, 0.0f, /*col*/ 0.8f, 0.1f, 0.8f, /*tex*/ 0.0f, 1.0f   // top left
 	};
 
 	const unsigned int indices_[6] = {

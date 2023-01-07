@@ -1,14 +1,17 @@
 #version 330 core
 in vec3 ourColor;
+in vec3 ourPosition;
+in vec2 ourTexCoord;
 
 out vec4 FragColor;
 
 uniform float time;
 
+uniform sampler2D ourTexture;
+uniform sampler2D ourTexture2;
+
 void main()
 {
-    FragColor = vec4(ourColor, 1.0);
-//    FragColor.x = FragColor.x * sin(time) / 2;
-//    FragColor.y = FragColor.y * sin(time) / 2;
-//    FragColor.z = FragColor.z * sin(time) / 2;
+    FragColor = mix(texture(ourTexture, ourTexCoord), texture(ourTexture2, ourTexCoord), 0.5);
+//    FragColor = texture(ourTexture, ourTexCoord) + texture(ourTexture2, ourTexCoord);
 }
