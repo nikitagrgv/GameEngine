@@ -30,22 +30,10 @@ void ExampleGameLogic::init()
 
 	// ------------------------- BUFFERS ------------------
 	// create VAO and VBO
+    vertex_buffer_ = std::make_unique<VertexBuffer>(vertices_, sizeof(vertices_));
+
 	glGenVertexArrays(1, &vao_);
-	glGenBuffers(1, &vbo_);
-	glGenBuffers(1, &ebo_);
-
-	// use our VAO now
 	glBindVertexArray(vao_);
-
-	// use our VBO now
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_);
-	// copy vertices data to vbo buffer
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_), vertices_, GL_STATIC_DRAW);
-
-	// use our EBO now
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
-	// copy indices to EBO
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices_), &indices_, GL_STATIC_DRAW);
 
 	// set vertex position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
@@ -59,6 +47,7 @@ void ExampleGameLogic::init()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
+    index_buffer_ = std::make_unique<IndexBuffer>(indices_, 6);
 
 	// ------------------------- TEXTURE1 ------------------
 	stbi_set_flip_vertically_on_load(true);
@@ -105,12 +94,10 @@ void ExampleGameLogic::init()
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
-	// unbind VBO
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	// unbind VAO
 	glBindVertexArray(0);
-	// unbind EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    index_buffer_->unbind();
+    vertex_buffer_->unbind();
 }
 
 void ExampleGameLogic::render()
@@ -147,8 +134,6 @@ void ExampleGameLogic::update()
 void ExampleGameLogic::shutdown()
 {
 	glDeleteVertexArrays(1, &vao_);
-	glDeleteBuffers(1, &vbo_);
-	glDeleteBuffers(1, &ebo_);
 }
 
 void ExampleGameLogic::compile_shaders()

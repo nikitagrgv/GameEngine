@@ -3,6 +3,9 @@
 class VertexBuffer
 {
 public:
+    VertexBuffer(const VertexBuffer&) = delete;
+    VertexBuffer& operator=(const VertexBuffer&) = delete;
+
     VertexBuffer(const void* data, int size);
     ~VertexBuffer();
 

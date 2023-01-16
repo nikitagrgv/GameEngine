@@ -3,6 +3,9 @@
 class IndexBuffer
 {
 public:
+    IndexBuffer(const IndexBuffer&) = delete;
+    IndexBuffer& operator=(const IndexBuffer&) = delete;
+
     IndexBuffer(const unsigned int* data, int count);
     ~IndexBuffer();
 

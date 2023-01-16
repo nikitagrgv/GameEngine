@@ -2,6 +2,10 @@
 
 #include "GameLogic.h"
 #include "ShadersManager.h"
+#include "IndexBuffer.h"
+#include "VertexBuffer.h"
+
+#include <memory>
 
 class ExampleGameLogic final : public GameLogic
 {
@@ -15,6 +19,9 @@ private:
 	void compile_shaders();
 
 private:
+    std::unique_ptr<IndexBuffer> index_buffer_;
+    std::unique_ptr<VertexBuffer> vertex_buffer_;
+
 	ShadersManager shaders_manager_;
 
 	bool wireframe_mode_ = false;
@@ -34,8 +41,6 @@ private:
 		1, 2, 3  // second triangle
 	};
 
-	unsigned int ebo_ = 0;
 	unsigned int vao_ = 0;
-	unsigned int vbo_ = 0;
 	unsigned int shader_program_ = 0;
 };
