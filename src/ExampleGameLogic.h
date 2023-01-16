@@ -1,10 +1,10 @@
 #pragma once
 
 #include "GameLogic.h"
-#include "ShadersManager.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
+#include "Shader.h"
 
 #include <memory>
 
@@ -24,7 +24,7 @@ private:
     std::unique_ptr<VertexBuffer> vertex_buffer_;
     std::unique_ptr<VertexArray> array_buffer_;
 
-	ShadersManager shaders_manager_;
+    std::unique_ptr<Shader> shader_;
 
 	bool wireframe_mode_ = false;
 
@@ -42,6 +42,4 @@ private:
 		0, 1, 3, // first triangle
 		1, 2, 3  // second triangle
 	};
-
-	unsigned int shader_program_ = 0;
 };

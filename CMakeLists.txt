@@ -16,8 +16,6 @@ src/ExampleGameLogic.cpp
 src/ExampleGameLogic.h
 src/Input.cpp
 src/Input.h
-src/ShadersManager.cpp
-src/ShadersManager.h
 src/FileManager.cpp
 src/FileManager.h
 src/VertexBuffer.cpp
@@ -28,6 +26,9 @@ src/VertexArray.cpp
 src/VertexArray.h
 src/VertexBufferLayout.cpp
 src/VertexBufferLayout.h
+src/Shader.cpp
+src/Shader.h
+
 src/Render.h
 )
 

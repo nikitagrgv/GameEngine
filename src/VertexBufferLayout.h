@@ -20,6 +20,7 @@ struct VertexBufferElement
         case GL_UNSIGNED_BYTE: return 1;
         }
         assert(0 && "Invalid type");
+        return 0;
     }
 };
 
