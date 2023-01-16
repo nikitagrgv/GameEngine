@@ -6,7 +6,25 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(${CMAKE_SOURCE_DIR}/include)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
-add_executable(LearnOpenGL src/main.cpp src/glad/glad.c src/Engine.cpp src/Engine.h src/GameLogic.h src/ExampleGameLogic.cpp src/ExampleGameLogic.h src/Input.cpp src/Input.h src/ShadersManager.cpp src/ShadersManager.h src/FileManager.cpp src/FileManager.h)
+add_executable(LearnOpenGL
+src/main.cpp
+src/glad/glad.c
+src/Engine.cpp
+src/Engine.h
+src/GameLogic.h
+src/ExampleGameLogic.cpp
+src/ExampleGameLogic.h
+src/Input.cpp
+src/Input.h
+src/ShadersManager.cpp
+src/ShadersManager.h
+src/FileManager.cpp
+src/FileManager.h
+src/VertexBuffer.cpp
+src/VertexBuffer.h
+src/IndexBuffer.cpp
+src/IndexBuffer.h
+)
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
 
