@@ -24,6 +24,11 @@ src/VertexBuffer.cpp
 src/VertexBuffer.h
 src/IndexBuffer.cpp
 src/IndexBuffer.h
+src/VertexArray.cpp
+src/VertexArray.h
+src/VertexBufferLayout.cpp
+src/VertexBufferLayout.h
+src/Render.h
 )
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)

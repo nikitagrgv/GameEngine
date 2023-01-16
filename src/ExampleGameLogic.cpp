@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "FileManager.h"
 #include "Input.h"
+#include "Render.h"
 
 #include <iostream>
 
@@ -29,25 +30,17 @@ void ExampleGameLogic::init()
 	});
 
 	// ------------------------- BUFFERS ------------------
-	// create VAO and VBO
-    vertex_buffer_ = std::make_unique<VertexBuffer>(vertices_, sizeof(vertices_));
-
-	glGenVertexArrays(1, &vao_);
-	glBindVertexArray(vao_);
-
-	// set vertex position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
-	glEnableVertexAttribArray(0);
-
-	// set vertex color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	// set vertex texture_ coordinates attribute
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+    array_buffer_ = std::make_unique<VertexArray>();
+    array_buffer_->bind();
+    GL_CHECK_ERROR();
 
     index_buffer_ = std::make_unique<IndexBuffer>(indices_, 6);
+    vertex_buffer_ = std::make_unique<VertexBuffer>(vertices_, sizeof(vertices_));
+    VertexBufferLayout layout;
+    layout.push<float>(3); // position
+    layout.push<float>(3); // color
+    layout.push<float>(2); // texture coordinates
+    array_buffer_->addBuffer(*vertex_buffer_.get(), layout);
 
 	// ------------------------- TEXTURE1 ------------------
 	stbi_set_flip_vertically_on_load(true);
@@ -94,10 +87,8 @@ void ExampleGameLogic::init()
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
-	// unbind VAO
-	glBindVertexArray(0);
-    index_buffer_->unbind();
-    vertex_buffer_->unbind();
+
+    array_buffer_->unbind();
 }
 
 void ExampleGameLogic::render()
@@ -121,8 +112,10 @@ void ExampleGameLogic::render()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2_);
 
-	glBindVertexArray(vao_);
+    array_buffer_->bind();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+    GL_CHECK_ERROR();
 }
 
 void ExampleGameLogic::update()
@@ -133,7 +126,6 @@ void ExampleGameLogic::update()
 
 void ExampleGameLogic::shutdown()
 {
-	glDeleteVertexArrays(1, &vao_);
 }
 
 void ExampleGameLogic::compile_shaders()

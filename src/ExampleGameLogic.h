@@ -4,6 +4,7 @@
 #include "ShadersManager.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
+#include "VertexArray.h"
 
 #include <memory>
 
@@ -21,6 +22,7 @@ private:
 private:
     std::unique_ptr<IndexBuffer> index_buffer_;
     std::unique_ptr<VertexBuffer> vertex_buffer_;
+    std::unique_ptr<VertexArray> array_buffer_;
 
 	ShadersManager shaders_manager_;
 
@@ -41,6 +43,5 @@ private:
 		1, 2, 3  // second triangle
 	};
 
-	unsigned int vao_ = 0;
 	unsigned int shader_program_ = 0;
 };
