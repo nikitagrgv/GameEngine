@@ -40,15 +40,11 @@ void Shader::setShaders(const std::string &filename_vertex, const std::string &f
         return;
 
 	program_id_ = create_program(vertex_shader, fragment_shader);
-    if (program_id_ == 0)
-    {
-	    glDeleteShader(vertex_shader);
-        glDeleteShader(fragment_shader);
-        return;
-    }
-
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
+
+    if (program_id_ == 0)
+        return;
 
     is_valid_ = true;
 }
