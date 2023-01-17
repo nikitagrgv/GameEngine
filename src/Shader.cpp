@@ -26,6 +26,8 @@ void Shader::setShaders(const std::string& filename_vertex, const std::string& f
 {
     is_valid_ = false;
 
+    location_cache_.clear();
+
     const std::string vertex_shader_source = FileManager::getFileText(filename_vertex.c_str());
     const std::string fragment_shader_source = FileManager::getFileText(filename_fragment.c_str());
 
@@ -59,14 +61,23 @@ void Shader::unbind() const
     glUseProgram(0);
 }
 
-int Shader::getUniformLocation(const std::string& name)
+int Shader::getUniformLocation(const std::string& name) const
 {
-    // TODO use some caching ?
-    const int location = glGetUniformLocation(program_id_, name.c_str());
-    if (location == -1)
+
+    auto it = location_cache_.find(name);
+
+    if (it != location_cache_.end())
     {
-        std::cout << "Uniform not found: " << name.c_str() << std::endl;
+        std::cout << "VALUE FROM CACHE!" << std::endl;
+        return (*it).second;
     }
+
+    const int location = glGetUniformLocation(program_id_, name.c_str());
+
+    if (location == -1)
+        std::cout << "Uniform not found: " << name.c_str() << std::endl;
+    else
+        location_cache_[name] = location;
 
     return location;
 }

@@ -10,6 +10,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <string>
+#include <unordered_map>
 
 class Shader
 {
@@ -24,7 +25,7 @@ public:
 
     bool isValid() const { return is_valid_; }
 
-    int getUniformLocation(const std::string& name);
+    int getUniformLocation(const std::string& name) const;
 
     template<typename T>
     void setUniform(const std::string& name, T value)
@@ -78,8 +79,9 @@ public:
 
     // -------------------------------------------------------
 
-
 private:
+    mutable std::unordered_map<std::string, int> location_cache_;
+
     unsigned int program_id_{0};
     bool is_valid_{false};
 };
