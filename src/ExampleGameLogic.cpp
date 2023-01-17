@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "FileManager.h"
 #include "Input.h"
+#include "OpenGLUtils.h"
 
 #include <iostream>
 

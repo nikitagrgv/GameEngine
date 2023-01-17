@@ -30,6 +30,7 @@ src/Shader.cpp
 src/Shader.h
 src/Renderer.h
 src/Renderer.cpp
+src/OpenGLUtils.h
 )
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
