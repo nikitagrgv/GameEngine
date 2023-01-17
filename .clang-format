@@ -86,8 +86,8 @@ LambdaBodyIndentation: Signature
 MaxEmptyLinesToKeep: 2
 NamespaceIndentation: None
 PenaltyBreakAssignment: 30
-PointerAlignment: Right
-ReferenceAlignment: Right
+PointerAlignment: Left
+ReferenceAlignment: Left
 ReflowComments: true
 SortIncludes: CaseSensitive
 SortUsingDeclarations: false
@@ -111,4 +111,4 @@ SpacesInContainerLiterals: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 TabWidth: 4
-UseTab: ForContinuationAndIndentation
+UseTab: Never

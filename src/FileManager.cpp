@@ -3,19 +3,19 @@
 #include <fstream>
 #include <sstream>
 
-std::string FileManager::getFileText(const char *file_path)
+std::string FileManager::getFileText(const char* file_path)
 {
-	std::ifstream ifstr(file_path);
+    std::ifstream ifstr(file_path);
 
-	if (!ifstr)
-		return "";
+    if (!ifstr)
+        return "";
 
-	std::ostringstream sstr;
+    std::ostringstream sstr;
 
-	if (!sstr)
-		return "";
+    if (!sstr)
+        return "";
 
-	sstr << ifstr.rdbuf();
+    sstr << ifstr.rdbuf();
 
-	return sstr.str();
+    return sstr.str();
 }

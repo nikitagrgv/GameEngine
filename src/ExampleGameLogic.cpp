@@ -12,25 +12,25 @@
 
 void ExampleGameLogic::init()
 {
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-	// CONTROLS CALLBACKS
-	Input::addKeyPressedCallback(GLFW_KEY_Q, [this](){
-		wireframe_mode_ = !wireframe_mode_;
-		std::cout << "Wireframe mode: " << wireframe_mode_ << std::endl;
+    // CONTROLS CALLBACKS
+    Input::addKeyPressedCallback(GLFW_KEY_Q, [this]() {
+        wireframe_mode_ = !wireframe_mode_;
+        std::cout << "Wireframe mode: " << wireframe_mode_ << std::endl;
 
-		glPolygonMode(GL_FRONT_AND_BACK, wireframe_mode_ ? GL_LINE : GL_FILL);
-	});
+        glPolygonMode(GL_FRONT_AND_BACK, wireframe_mode_ ? GL_LINE : GL_FILL);
+    });
 
-	Input::addKeyPressedCallback(GLFW_KEY_R, [this](){
-		std::cout << "Recompile all shaders..." << std::endl;
-		compile_shaders();
-	});
+    Input::addKeyPressedCallback(GLFW_KEY_R, [this]() {
+        std::cout << "Recompile all shaders..." << std::endl;
+        compile_shaders();
+    });
 
-	// ------------------------- SHADERS ------------------
+    // ------------------------- SHADERS ------------------
     compile_shaders();
 
-	// ------------------------- BUFFERS ------------------
+    // ------------------------- BUFFERS ------------------
     array_buffer_ = std::make_unique<VertexArray>();
     array_buffer_->bind();
     GL_CHECK_ERROR();
@@ -43,50 +43,50 @@ void ExampleGameLogic::init()
     layout.push<float>(2); // texture coordinates
     array_buffer_->addBuffer(*vertex_buffer_.get(), layout);
 
-	// ------------------------- TEXTURE1 ------------------
-	stbi_set_flip_vertically_on_load(true);
-	{
-		glGenTextures(1, &texture_);
-		glBindTexture(GL_TEXTURE_2D, texture_);
+    // ------------------------- TEXTURE1 ------------------
+    stbi_set_flip_vertically_on_load(true);
+    {
+        glGenTextures(1, &texture_);
+        glBindTexture(GL_TEXTURE_2D, texture_);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		int width;
-		int height;
-		int number_channels;
-		const char *filename = "../data/textures/container.jpg";
-		unsigned char *data = stbi_load(filename, &width, &height, &number_channels, 0);
-		assert(data != nullptr);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		stbi_image_free(data);
+        int width;
+        int height;
+        int number_channels;
+        const char* filename = "../data/textures/container.jpg";
+        unsigned char* data = stbi_load(filename, &width, &height, &number_channels, 0);
+        assert(data != nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        stbi_image_free(data);
 
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
 
-	// ------------------------- TEXTURE2 ------------------
-	{
-		glGenTextures(1, &texture2_);
-		glBindTexture(GL_TEXTURE_2D, texture2_);
+    // ------------------------- TEXTURE2 ------------------
+    {
+        glGenTextures(1, &texture2_);
+        glBindTexture(GL_TEXTURE_2D, texture2_);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		int width;
-		int height;
-		int number_channels;
-		const char *filename = "../data/textures/awesomeface.png";
-		unsigned char *data = stbi_load(filename, &width, &height, &number_channels, 0);
-		assert(data != nullptr);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		stbi_image_free(data);
+        int width;
+        int height;
+        int number_channels;
+        const char* filename = "../data/textures/awesomeface.png";
+        unsigned char* data = stbi_load(filename, &width, &height, &number_channels, 0);
+        assert(data != nullptr);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        stbi_image_free(data);
 
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
 
 
     array_buffer_->unbind();
@@ -94,40 +94,38 @@ void ExampleGameLogic::init()
 
 void ExampleGameLogic::render()
 {
-	// int uniform_time_location = glGetUniformLocation(shader_program_, "time");
-	// int uniform_texture1_location = glGetUniformLocation(shader_program_, "ourTexture");
-	// int uniform_texture2_location = glGetUniformLocation(shader_program_, "ourTexture2");
+    // int uniform_time_location = glGetUniformLocation(shader_program_, "time");
+    // int uniform_texture1_location = glGetUniformLocation(shader_program_, "ourTexture");
+    // int uniform_texture2_location = glGetUniformLocation(shader_program_, "ourTexture2");
 
-	shader_->bind();
+    shader_->bind();
 
-	// if (uniform_time_location != -1)
-	// 	glUniform1f(uniform_time_location, (float)Engine::getTime());
-	// if (uniform_texture1_location != -1)
-	// 	glUniform1i(uniform_texture1_location, 0);
-	// if (uniform_texture2_location != -1)
-	// 	glUniform1i(uniform_texture2_location, 1);
+    // if (uniform_time_location != -1)
+    // 	glUniform1f(uniform_time_location, (float)Engine::getTime());
+    // if (uniform_texture1_location != -1)
+    // 	glUniform1i(uniform_texture1_location, 0);
+    // if (uniform_texture2_location != -1)
+    // 	glUniform1i(uniform_texture2_location, 1);
 
-	// glActiveTexture(GL_TEXTURE0);
-	// glBindTexture(GL_TEXTURE_2D, texture_);
+    // glActiveTexture(GL_TEXTURE0);
+    // glBindTexture(GL_TEXTURE_2D, texture_);
 
-	// glActiveTexture(GL_TEXTURE1);
-	// glBindTexture(GL_TEXTURE_2D, texture2_);
+    // glActiveTexture(GL_TEXTURE1);
+    // glBindTexture(GL_TEXTURE_2D, texture2_);
 
     array_buffer_->bind();
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
     GL_CHECK_ERROR();
 }
 
 void ExampleGameLogic::update()
 {
-	if (Input::isKeyDown(GLFW_KEY_ESCAPE))
-		Engine::shutdownLater();
+    if (Input::isKeyDown(GLFW_KEY_ESCAPE))
+        Engine::shutdownLater();
 }
 
-void ExampleGameLogic::shutdown()
-{
-}
+void ExampleGameLogic::shutdown() {}
 
 void ExampleGameLogic::compile_shaders()
 {

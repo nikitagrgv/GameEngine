@@ -1,10 +1,12 @@
 #include "IndexBuffer.h"
 
+// clang-format off
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+// clang-format on
 
-IndexBuffer::IndexBuffer(const unsigned int *data, int count) :
-    count_(count)
+IndexBuffer::IndexBuffer(const unsigned int* data, int count)
+    : count_(count)
 {
     glGenBuffers(1, &buffer_id_);
     bind();

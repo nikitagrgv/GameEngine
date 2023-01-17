@@ -2,14 +2,14 @@
 
 #include <glad/glad.h>
 
-#include <vector>
 #include <cassert>
+#include <vector>
 
 struct VertexBufferElement
 {
-	unsigned int type;
-	int count;
-	bool normalized;
+    unsigned int type;
+    int count;
+    bool normalized;
 
     static int getSizeOfType(unsigned int type)
     {
@@ -27,45 +27,44 @@ struct VertexBufferElement
 class VertexBufferLayout
 {
 public:
-	VertexBufferLayout();
-	~VertexBufferLayout();
+    VertexBufferLayout();
+    ~VertexBufferLayout();
 
     const std::vector<VertexBufferElement>& getElements() const { return elements_; }
     int getStride() const { return stride_; }
 
-	template<typename T>
-	void push(int count)
-	{
-		static_assert(0 && "Invalid type");
-	}
+    template<typename T>
+    void push(int count)
+    {
+        static_assert(0 && "Invalid type");
+    }
 
-	template<>
-	void push<float>(int count)
-	{
+    template<>
+    void push<float>(int count)
+    {
         do_push(count, GL_FLOAT);
+    }
 
-	}
-
-	template<>
-	void push<unsigned int>(int count)
-	{
+    template<>
+    void push<unsigned int>(int count)
+    {
         do_push(count, GL_UNSIGNED_INT);
-	}
+    }
 
-	template<>
-	void push<unsigned char>(int count)
-	{
+    template<>
+    void push<unsigned char>(int count)
+    {
         do_push(count, GL_UNSIGNED_BYTE);
-	}
+    }
 
 private:
     void do_push(int count, unsigned int type)
     {
-		elements_.push_back({type, count, false});
+        elements_.push_back({type, count, false});
         stride_ += count * VertexBufferElement::getSizeOfType(type);
     }
 
 private:
-	std::vector<VertexBufferElement> elements_;
+    std::vector<VertexBufferElement> elements_;
     int stride_{0};
 };

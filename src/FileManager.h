@@ -5,5 +5,5 @@
 class FileManager
 {
 public:
-	static std::string getFileText(const char *file_path);
+    static std::string getFileText(const char* file_path);
 };

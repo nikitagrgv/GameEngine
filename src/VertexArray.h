@@ -1,7 +1,7 @@
 #pragma once
 
-#include "VertexBufferLayout.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 
 class VertexArray
 {
@@ -9,7 +9,7 @@ class VertexArray
 public:
     VertexArray();
     ~VertexArray();
-    
+
     void bind() const;
     void unbind() const;
 
@@ -18,4 +18,3 @@ public:
 private:
     unsigned int buffer_id_{0};
 };
-
