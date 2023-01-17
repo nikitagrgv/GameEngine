@@ -11,3 +11,15 @@
     {                                                                                              \
         std::cout << "OpenGL error: " << error << std::endl;                                       \
     }
+
+class Renderer
+{    
+public:
+    Renderer();
+    ~Renderer();
+
+private:
+
+};
+
+

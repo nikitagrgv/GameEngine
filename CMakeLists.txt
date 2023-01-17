@@ -28,8 +28,8 @@ src/VertexBufferLayout.cpp
 src/VertexBufferLayout.h
 src/Shader.cpp
 src/Shader.h
-
-src/Render.h
+src/Renderer.h
+src/Renderer.cpp
 )
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
