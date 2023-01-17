@@ -31,6 +31,13 @@ public:
     void setUniform(const std::string& name, T value)
     {
         const auto location = getUniformLocation(name);
+
+        if (location == -1)
+        {
+            std::cout << "Uniform not found: " << name.c_str() << std::endl;
+            return;
+        }
+
         setUniform(location, value);
     }
 

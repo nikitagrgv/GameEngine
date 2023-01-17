@@ -52,7 +52,12 @@ void Shader::setShaders(const std::string& filename_vertex, const std::string& f
 
 void Shader::bind() const
 {
-    assert(isValid());
+    if (!isValid())
+    {
+        std::cout << "Cannot bind invalid shader" << std::endl;
+        return;
+    }
+    
     glUseProgram(program_id_);
 }
 
@@ -71,9 +76,7 @@ int Shader::getUniformLocation(const std::string& name) const
 
     const int location = glGetUniformLocation(program_id_, name.c_str());
 
-    if (location == -1)
-        std::cout << "Uniform not found: " << name.c_str() << std::endl;
-    else
+    if (location != -1)
         location_cache_[name] = location;
 
     return location;
