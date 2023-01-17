@@ -90,6 +90,9 @@ void ExampleGameLogic::init()
 
 
     array_buffer_->unbind();
+    vertex_buffer_->unbind();
+    index_buffer_->unbind();
+    shader_->unbind();
 }
 
 void ExampleGameLogic::render()
@@ -106,7 +109,7 @@ void ExampleGameLogic::render()
     glBindTexture(GL_TEXTURE_2D, texture2_);
 
     array_buffer_->bind();
-    
+
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
     GL_CHECK_ERROR();
@@ -130,5 +133,6 @@ void ExampleGameLogic::compile_shaders()
     else
         shader_ = std::make_unique<Shader>(vertex_shader_filename, fragment_shader_filename);
 
-    assert(shader_->isValid());
+    if (!shader_->isValid())
+        std::cout << "SHADER INVALID!" << std::endl;
 }
