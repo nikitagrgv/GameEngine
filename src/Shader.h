@@ -2,7 +2,13 @@
 
 #include "FileManager.h"
 
+// clang-format off
+#include <glad/glad.h>
+// clang-format on
+
 #include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 #include <string>
 
 class Shader
@@ -18,18 +24,60 @@ public:
 
     bool isValid() const { return is_valid_; }
 
+    int getUniformLocation(const std::string& name);
+
     template<typename T>
     void setUniform(const std::string& name, T value)
+    {
+        const auto location = getUniformLocation(name);
+        setUniform(location, value);
+    }
+
+    // -------------------------------------------------------
+
+    template<typename T>
+    void setUniform(int location, T value)
     {
         static_assert(0 && "Invalid type");
     }
 
     template<>
-    void setUniform<float>(const std::string& name, float value)
-    {}
+    void setUniform<float>(int location, float value)
+    {
+        bind();
+        glUniform1f(location, value);
+    }
 
-private:
-    unsigned int getUniformLocation(const std::string& name);
+    template<>
+    void setUniform<int>(int location, int value)
+    {
+        bind();
+        glUniform1i(location, value);
+    }
+
+    template<>
+    void setUniform<glm::vec2>(int location, glm::vec2 value)
+    {
+        bind();
+        glUniform2f(location, value.x, value.y);
+    }
+
+    template<>
+    void setUniform<glm::vec3>(int location, glm::vec3 value)
+    {
+        bind();
+        glUniform3f(location, value.x, value.y, value.z);
+    }
+
+    template<>
+    void setUniform<glm::vec4>(int location, glm::vec4 value)
+    {
+        bind();
+        glUniform4f(location, value.x, value.y, value.z, value.w);
+    }
+
+    // -------------------------------------------------------
+
 
 private:
     unsigned int program_id_{0};

@@ -94,26 +94,19 @@ void ExampleGameLogic::init()
 
 void ExampleGameLogic::render()
 {
-    // int uniform_time_location = glGetUniformLocation(shader_program_, "time");
-    // int uniform_texture1_location = glGetUniformLocation(shader_program_, "ourTexture");
-    // int uniform_texture2_location = glGetUniformLocation(shader_program_, "ourTexture2");
-
     shader_->bind();
+    shader_->setUniform<float>("time", (float)Engine::getTime());
+    shader_->setUniform<int>("ourTexture", 0);
+    shader_->setUniform<int>("ourTexture2", 1);
 
-    // if (uniform_time_location != -1)
-    // 	glUniform1f(uniform_time_location, (float)Engine::getTime());
-    // if (uniform_texture1_location != -1)
-    // 	glUniform1i(uniform_texture1_location, 0);
-    // if (uniform_texture2_location != -1)
-    // 	glUniform1i(uniform_texture2_location, 1);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_);
 
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, texture_);
-
-    // glActiveTexture(GL_TEXTURE1);
-    // glBindTexture(GL_TEXTURE_2D, texture2_);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture2_);
 
     array_buffer_->bind();
+    
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
     GL_CHECK_ERROR();

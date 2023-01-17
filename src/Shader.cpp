@@ -1,9 +1,5 @@
 #include "Shader.h"
 
-// clang-format off
-#include <glad/glad.h>
-// clang-format on
-
 #include <iostream>
 #include <string>
 
@@ -63,9 +59,16 @@ void Shader::unbind() const
     glUseProgram(0);
 }
 
-unsigned int Shader::getUniformLocation(const std::string& name)
+int Shader::getUniformLocation(const std::string& name)
 {
-    return 0; // TODO
+    // TODO use some caching ?
+    const int location = glGetUniformLocation(program_id_, name.c_str());
+    if (location == -1)
+    {
+        std::cout << "Uniform not found: " << name.c_str() << std::endl;
+    }
+
+    return location;
 }
 
 namespace
