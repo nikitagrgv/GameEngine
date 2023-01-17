@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
+#include "Renderer.h"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -22,10 +23,11 @@ private:
     void compile_shaders();
 
 private:
+    Renderer renderer_;
+
     std::unique_ptr<IndexBuffer> index_buffer_;
     std::unique_ptr<VertexBuffer> vertex_buffer_;
     std::unique_ptr<VertexArray> array_buffer_;
-
     std::unique_ptr<Shader> shader_;
 
     bool wireframe_mode_ = false;

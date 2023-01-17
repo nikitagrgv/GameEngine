@@ -4,6 +4,10 @@
 #include <glad/glad.h>
 // clang-format on
 
+#include "VertexArray.h"
+#include "IndexBuffer.h"
+#include "Shader.h"
+
 #include <iostream>
 
 #define GL_CHECK_ERROR()                                                                           \
@@ -18,7 +22,7 @@ public:
     Renderer();
     ~Renderer();
 
-private:
+    void draw(const VertexArray& vertex_array, const IndexBuffer& index_buffer, const Shader& shader) const;
 
 };
 

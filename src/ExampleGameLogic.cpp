@@ -3,7 +3,6 @@
 #include "Engine.h"
 #include "FileManager.h"
 #include "Input.h"
-#include "Render.h"
 
 #include <iostream>
 
@@ -97,7 +96,6 @@ void ExampleGameLogic::init()
 
 void ExampleGameLogic::render()
 {
-    shader_->bind();
     shader_->setUniform<float>("time", (float)Engine::getTime());
     shader_->setUniform<int>("ourTexture", 0);
     shader_->setUniform<int>("ourTexture2", 1);
@@ -108,9 +106,7 @@ void ExampleGameLogic::render()
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture2_);
 
-    array_buffer_->bind();
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    renderer_.draw(*array_buffer_.get(), *index_buffer_.get(), *shader_.get());
 
     GL_CHECK_ERROR();
 }
