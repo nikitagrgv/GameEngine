@@ -66,7 +66,6 @@ int Shader::getUniformLocation(const std::string& name) const
     auto it = location_cache_.find(name);
     if (it != location_cache_.end())
     {
-        std::cout << "VALUE FROM CACHE!" << std::endl;
         return (*it).second;
     }
 
