@@ -24,9 +24,6 @@ public:
     float getYaw() const { return yaw_; }
     void setYaw(float yaw) { yaw_ = yaw; update_all_matrices(); }
 
-    float getRoll() const { return roll_; }
-    void setRoll(float roll) { roll_ = roll; update_all_matrices(); }
-
 private:
     void update_all_matrices();
     void update_transform();
@@ -41,5 +38,4 @@ private:
     glm::vec3 position_{0};
     float pitch_{0};
     float yaw_{0};
-    float roll_{0};
 };

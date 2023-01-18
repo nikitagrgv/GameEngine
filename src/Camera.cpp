@@ -21,11 +21,10 @@ void Camera::update_transform()
 
     const mat4 matrix_rotate_pitch = rotate(mat4(1), pitch_, vec_right);
     const mat4 matrix_rotate_yaw = rotate(mat4(1), yaw_, vec_up);
-    const mat4 matrix_rotate_roll = rotate(mat4(1), roll_, vec_forward);
 
     const mat4 matrix_translate = translate(mat4(1), position_);
 
-    transform_ = matrix_translate * matrix_rotate_roll * matrix_rotate_pitch * matrix_rotate_yaw;
+    transform_ = matrix_translate * matrix_rotate_yaw * matrix_rotate_pitch;
 }
 
 void Camera::update_view_matrix()

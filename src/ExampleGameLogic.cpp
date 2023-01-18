@@ -67,6 +67,7 @@ void ExampleGameLogic::init()
     const float z_far = 10000.f;
 
     camera_ = std::make_unique<Camera>(fov, aspect, z_near, z_far);
+    camera_->setPosition(vec_forward * -2.f);
 }
 
 void ExampleGameLogic::render()
@@ -86,20 +87,20 @@ void ExampleGameLogic::render()
         renderer_.draw(*array_buffer_, *index_buffer_, *shader_);
     }
 
-//    // second
-//    {
-//        const auto transform_ = camera_->getProjection() * camera_->getView() * model2_mat_;
-//
-//        shader_->setUniform<float>("uTime", (float)Engine::getTime());
-//        shader_->setUniform<int>("uTexture", 0);
-//        shader_->setUniform<int>("uTexture_2", 1);
-//        shader_->setUniform<const glm::mat4&>("uTransform", glm::mat4(1));
-//
-//        texture0_->bind(0);
-//        texture1_->bind(1);
-//
-//        renderer_.draw(*array_buffer_, *index_buffer_, *shader_);
-//    }
+    // second
+    {
+        const auto transform_ = camera_->getProjection() * camera_->getView() * model2_mat_;
+
+        shader_->setUniform<float>("uTime", (float)Engine::getTime());
+        shader_->setUniform<int>("uTexture", 0);
+        shader_->setUniform<int>("uTexture_2", 1);
+        shader_->setUniform<const glm::mat4&>("uTransform", transform_);
+
+        texture0_->bind(0);
+        texture1_->bind(1);
+
+        renderer_.draw(*array_buffer_, *index_buffer_, *shader_);
+    }
 
     GL_CHECK_ERROR();
 }
@@ -108,6 +109,26 @@ void ExampleGameLogic::update()
 {
     const float dt = (float)Engine::getDelta();
 
+    // camera rotation
+    {
+        constexpr float speed = glm::radians(45.f);
+
+        int rot_dir_yaw = 0;
+        if (Input::isKeyDown(GLFW_KEY_LEFT))
+            rot_dir_yaw += 1;
+        if (Input::isKeyDown(GLFW_KEY_RIGHT))
+            rot_dir_yaw -= 1;
+
+        int rot_dir_pitch = 0;
+        if (Input::isKeyDown(GLFW_KEY_UP))
+            rot_dir_pitch += 1;
+        if (Input::isKeyDown(GLFW_KEY_DOWN))
+            rot_dir_pitch -= 1;
+
+        camera_->setYaw(camera_->getYaw() + (float)rot_dir_yaw * speed * dt);
+        camera_->setPitch(camera_->getPitch() + (float)rot_dir_pitch * speed * dt);
+    }
+
     // camera movement
     {
         constexpr float speed = 1.f;
@@ -115,19 +136,19 @@ void ExampleGameLogic::update()
         glm::vec3 offset{};
 
         if (Input::isKeyDown(GLFW_KEY_D))
-            offset += vec_right;
+            offset += getRight(camera_->getTransform());
         if (Input::isKeyDown(GLFW_KEY_A))
-            offset -= vec_right;
+            offset -= getRight(camera_->getTransform());
 
         if (Input::isKeyDown(GLFW_KEY_W))
-            offset += vec_forward;
+            offset += getForward(camera_->getTransform());
         if (Input::isKeyDown(GLFW_KEY_S))
-            offset -= vec_forward;
+            offset -= getForward(camera_->getTransform());
 
         if (Input::isKeyDown(GLFW_KEY_SPACE))
-            offset += vec_up;
+            offset += getUp(camera_->getTransform());
         if (Input::isKeyDown(GLFW_KEY_LEFT_SHIFT))
-            offset -= vec_up;
+            offset -= getUp(camera_->getTransform());
 
         offset *= speed * dt;
 
@@ -141,15 +162,15 @@ void ExampleGameLogic::update()
         constexpr float speed = glm::radians(45.f);
 
         int rot_dir_y = 0;
-        if (Input::isKeyDown(GLFW_KEY_LEFT))
+        if (Input::isKeyDown(GLFW_KEY_1))
             rot_dir_y += 1;
-        if (Input::isKeyDown(GLFW_KEY_RIGHT))
+        if (Input::isKeyDown(GLFW_KEY_2))
             rot_dir_y -= 1;
 
         int rot_dir_x = 0;
-        if (Input::isKeyDown(GLFW_KEY_UP))
+        if (Input::isKeyDown(GLFW_KEY_3))
             rot_dir_x += 1;
-        if (Input::isKeyDown(GLFW_KEY_DOWN))
+        if (Input::isKeyDown(GLFW_KEY_4))
             rot_dir_x -= 1;
 
         model_mat_ = glm::rotate(model_mat_, (float)rot_dir_y * speed * dt, {0, 1, 0});
