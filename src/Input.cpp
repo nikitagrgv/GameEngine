@@ -12,6 +12,22 @@ bool Input::isMouseButtonDown(int button)
     return glfwGetMouseButton(get().glfw_window_, button);
 }
 
+glm::dvec2 Input::getMousePosition()
+{
+    glm::dvec2 pos;
+    glfwGetCursorPos(get().glfw_window_, &pos.x, &pos.y);
+    return pos;
+}
+
+glm::dvec2 Input::getMouseDelta()
+{
+    return get().mouse_delta_;
+}
+
+void Input::setCursorEnabled(bool enabled)
+{
+    glfwSetInputMode(get().glfw_window_, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+}
 
 int Input::addKeyPressedCallback(int key, const std::function<void()>& callback)
 {
@@ -94,6 +110,13 @@ void Input::init()
     glfw_window_ = Engine::get().glfw_window_;
     glfwSetKeyCallback(glfw_window_, &Input::glfw_key_callback);
     glfwSetMouseButtonCallback(glfw_window_, &Input::glfw_mouse_button_callback);
+}
+
+void Input::update()
+{
+    const glm::dvec2 new_pos = getMousePosition();
+    mouse_delta_ = new_pos - mouse_position_;
+    mouse_position_ = new_pos;
 }
 
 Input& Input::get()

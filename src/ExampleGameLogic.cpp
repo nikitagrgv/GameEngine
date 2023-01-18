@@ -29,6 +29,14 @@ void ExampleGameLogic::init()
         compile_shaders();
     });
 
+    Input::addMouseButtonPressedCallback(GLFW_MOUSE_BUTTON_RIGHT, [this]() {
+        Input::setCursorEnabled(false);
+    });
+    Input::addMouseButtonReleasedCallback(GLFW_MOUSE_BUTTON_RIGHT, [this]() {
+        Input::setCursorEnabled(true);
+    });
+
+
     // ------------------------- SHADERS ------------------
     compile_shaders();
 
@@ -61,7 +69,7 @@ void ExampleGameLogic::init()
 
     // ------------------------- CAMERA ------------------
 
-    const auto fov = glm::radians(45.f);
+    const auto fov = glm::radians(60.f);
     const float aspect = (float)Engine::getWidth() / (float)Engine::getHeight();
     const float z_near = 0.1f;
     const float z_far = 10000.f;
@@ -109,24 +117,18 @@ void ExampleGameLogic::update()
 {
     const float dt = (float)Engine::getDelta();
 
+
+    std::cout << Input::getMouseDelta().x << "  " <<  Input::getMouseDelta().y << std::endl;
+
     // camera rotation
+    if (Input::isMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
     {
-        constexpr float speed = glm::radians(45.f);
+        constexpr float speed = glm::radians(0.1f);
 
-        int rot_dir_yaw = 0;
-        if (Input::isKeyDown(GLFW_KEY_LEFT))
-            rot_dir_yaw += 1;
-        if (Input::isKeyDown(GLFW_KEY_RIGHT))
-            rot_dir_yaw -= 1;
+        const auto mouse_delta = Input::getMouseDelta();
 
-        int rot_dir_pitch = 0;
-        if (Input::isKeyDown(GLFW_KEY_UP))
-            rot_dir_pitch += 1;
-        if (Input::isKeyDown(GLFW_KEY_DOWN))
-            rot_dir_pitch -= 1;
-
-        camera_->setYaw(camera_->getYaw() + (float)rot_dir_yaw * speed * dt);
-        camera_->setPitch(camera_->getPitch() + (float)rot_dir_pitch * speed * dt);
+        camera_->setYaw(camera_->getYaw() + (float)-mouse_delta.x * speed);
+        camera_->setPitch(camera_->getPitch() + (float)-mouse_delta.y * speed);
     }
 
     // camera movement

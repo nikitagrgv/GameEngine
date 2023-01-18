@@ -45,6 +45,7 @@ void Engine::run()
         get().swap();
 
         glfwPollEvents();
+        Input::get().update();
     }
 
     get().shutdown();
