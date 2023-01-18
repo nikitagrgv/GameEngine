@@ -7,33 +7,35 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
 add_executable(LearnOpenGL
-src/main.cpp
-src/glad/glad.c
-src/Engine.cpp
-src/Engine.h
-src/GameLogic.h
-src/ExampleGameLogic.cpp
-src/ExampleGameLogic.h
-src/Input.cpp
-src/Input.h
-src/FileManager.cpp
-src/FileManager.h
-src/VertexBuffer.cpp
-src/VertexBuffer.h
-src/IndexBuffer.cpp
-src/IndexBuffer.h
-src/VertexArray.cpp
-src/VertexArray.h
-src/VertexBufferLayout.cpp
-src/VertexBufferLayout.h
-src/Shader.cpp
-src/Shader.h
-src/Renderer.h
-src/Renderer.cpp
-src/OpenGLUtils.h
-src/Texture.h
-src/Texture.cpp
-)
+        src/main.cpp
+        src/glad/glad.c
+        src/Engine.cpp
+        src/Engine.h
+        src/GameLogic.h
+        src/ExampleGameLogic.cpp
+        src/ExampleGameLogic.h
+        src/Input.cpp
+        src/Input.h
+        src/FileManager.cpp
+        src/FileManager.h
+        src/VertexBuffer.cpp
+        src/VertexBuffer.h
+        src/IndexBuffer.cpp
+        src/IndexBuffer.h
+        src/VertexArray.cpp
+        src/VertexArray.h
+        src/VertexBufferLayout.cpp
+        src/VertexBufferLayout.h
+        src/Shader.cpp
+        src/Shader.h
+        src/Renderer.h
+        src/Renderer.cpp
+        src/OpenGLUtils.h
+        src/Texture.h
+        src/Texture.cpp
+        src/Camera.cpp
+        src/Camera.h
+        src/MathUtils.h)
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
 

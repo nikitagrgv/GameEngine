@@ -6,9 +6,8 @@
 #include <glad/glad.h>
 // clang-format on
 
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
+#include <glm/glm.hpp>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 
@@ -38,7 +37,7 @@ public:
             return;
         }
 
-        setUniform(location, value);
+        setUniform<T>(location, value);
     }
 
     // -------------------------------------------------------
@@ -64,24 +63,38 @@ public:
     }
 
     template<>
-    void setUniform<glm::vec2>(int location, glm::vec2 value)
+    void setUniform(int location, const glm::vec2& value)
     {
         bind();
         glUniform2f(location, value.x, value.y);
     }
 
     template<>
-    void setUniform<glm::vec3>(int location, glm::vec3 value)
+    void setUniform(int location, const glm::vec3& value)
     {
         bind();
         glUniform3f(location, value.x, value.y, value.z);
     }
 
     template<>
-    void setUniform<glm::vec4>(int location, glm::vec4 value)
+    void setUniform(int location, const glm::vec4& value)
     {
         bind();
         glUniform4f(location, value.x, value.y, value.z, value.w);
+    }
+
+    template<>
+    void setUniform(int location, const glm::mat3& value)
+    {
+        bind();
+        glUniformMatrix3fv(location, 1, false, &value[0][0]);
+    }
+
+    template<>
+    void setUniform(int location, const glm::mat4& value)
+    {
+        bind();
+        glUniformMatrix4fv(location, 1, false, &value[0][0]);
     }
 
     // -------------------------------------------------------

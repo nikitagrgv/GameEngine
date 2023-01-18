@@ -7,9 +7,11 @@
 #include "VertexBuffer.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "Camera.h"
 
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <memory>
 
 class ExampleGameLogic final : public GameLogic
@@ -35,6 +37,12 @@ private:
     std::unique_ptr<Texture> texture1_;
 
     bool wireframe_mode_ = false;
+
+    std::unique_ptr<Camera> camera_;
+
+    glm::mat4 model_mat_{1};
+
+    glm::mat4 model2_mat_{glm::translate(glm::mat4(1), {1, 1, 0})};
 
     struct Vertex
     {

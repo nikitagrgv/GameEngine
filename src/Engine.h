@@ -28,12 +28,19 @@ public:
     static double getTime();
     static double getDelta();
 
+    static double getWidth();
+    static double getHeight();
+
 private:
     Engine() = default;
     ~Engine() = default;
 
     void shutdown();
-    void update_viewport_size(int width, int height) const;
+    void update_viewport_size(int width, int height);
+
+    void render();
+    void update();
+    void swap();
 
 private:
     GLFWwindow* glfw_window_{nullptr};
@@ -42,7 +49,7 @@ private:
 
     double time_{0};
     double delta_time_{0};
-    void render();
-    void update();
-    void swap();
+
+    int width_{0};
+    int height_{0};
 };

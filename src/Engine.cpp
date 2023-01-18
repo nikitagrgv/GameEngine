@@ -48,8 +48,10 @@ void Engine::run()
     get().shutdown();
 }
 
-void Engine::update_viewport_size(int width, int height) const
+void Engine::update_viewport_size(int width, int height)
 {
+    width_ = width;
+    height_ = height;
     glViewport(0, 0, width, height);
 }
 
@@ -83,6 +85,16 @@ double Engine::getDelta()
     return get().delta_time_;
 }
 
+double Engine::getWidth()
+{
+    return get().width_;
+}
+
+double Engine::getHeight()
+{
+    return get().height_;
+}
+
 void Engine::shutdownLater()
 {
     glfwSetWindowShouldClose(get().glfw_window_, true);
@@ -114,3 +126,4 @@ void Engine::shutdown()
 
     glfwTerminate();
 }
+

@@ -4,6 +4,7 @@
 #include "FileManager.h"
 #include "Input.h"
 #include "OpenGLUtils.h"
+#include "MathUtils.h"
 
 #include <iostream>
 
@@ -12,7 +13,11 @@ void ExampleGameLogic::init()
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
     // CONTROLS CALLBACKS
-    Input::addKeyPressedCallback(GLFW_KEY_Q, [this]() {
+    Input::addKeyPressedCallback(GLFW_KEY_ESCAPE, []() {
+        Engine::shutdownLater();
+    });
+
+    Input::addKeyPressedCallback(GLFW_KEY_F1, [this]() {
         wireframe_mode_ = !wireframe_mode_;
         std::cout << "Wireframe mode: " << wireframe_mode_ << std::endl;
 
@@ -38,7 +43,7 @@ void ExampleGameLogic::init()
     layout.push<float>(3); // position
     layout.push<float>(3); // color
     layout.push<float>(2); // texture coordinates
-    array_buffer_->addBuffer(*vertex_buffer_.get(), layout);
+    array_buffer_->addBuffer(*vertex_buffer_, layout);
 
     // ------------------------- TEXTURES ------------------
 
@@ -53,26 +58,103 @@ void ExampleGameLogic::init()
     shader_->unbind();
     texture0_->unbind();
     texture1_->unbind();
+
+    // ------------------------- CAMERA ------------------
+
+    const auto fov = glm::radians(45.f);
+    const float aspect = (float)Engine::getWidth() / (float)Engine::getHeight();
+    const float z_near = 0.1f;
+    const float z_far = 10000.f;
+
+    camera_ = std::make_unique<Camera>(fov, aspect, z_near, z_far);
 }
 
 void ExampleGameLogic::render()
 {
-    shader_->setUniform<float>("uTime", (float)Engine::getTime());
-    shader_->setUniform<int>("uTexture", 0);
-    shader_->setUniform<int>("uTexture_2", 1);
+    // first
+    {
+        const auto transform_ = camera_->getProjection() * camera_->getView() * model_mat_;
 
-    texture0_->bind(0);
-    texture1_->bind(1);
+        shader_->setUniform<float>("uTime", (float)Engine::getTime());
+        shader_->setUniform<int>("uTexture", 0);
+        shader_->setUniform<int>("uTexture_2", 1);
+        shader_->setUniform<const glm::mat4&>("uTransform", transform_);
 
-    renderer_.draw(*array_buffer_.get(), *index_buffer_.get(), *shader_.get());
+        texture0_->bind(0);
+        texture1_->bind(1);
+
+        renderer_.draw(*array_buffer_, *index_buffer_, *shader_);
+    }
+
+//    // second
+//    {
+//        const auto transform_ = camera_->getProjection() * camera_->getView() * model2_mat_;
+//
+//        shader_->setUniform<float>("uTime", (float)Engine::getTime());
+//        shader_->setUniform<int>("uTexture", 0);
+//        shader_->setUniform<int>("uTexture_2", 1);
+//        shader_->setUniform<const glm::mat4&>("uTransform", glm::mat4(1));
+//
+//        texture0_->bind(0);
+//        texture1_->bind(1);
+//
+//        renderer_.draw(*array_buffer_, *index_buffer_, *shader_);
+//    }
 
     GL_CHECK_ERROR();
 }
 
 void ExampleGameLogic::update()
 {
-    if (Input::isKeyDown(GLFW_KEY_ESCAPE))
-        Engine::shutdownLater();
+    const float dt = (float)Engine::getDelta();
+
+    // camera movement
+    {
+        constexpr float speed = 1.f;
+
+        glm::vec3 offset{};
+
+        if (Input::isKeyDown(GLFW_KEY_D))
+            offset += vec_right;
+        if (Input::isKeyDown(GLFW_KEY_A))
+            offset -= vec_right;
+
+        if (Input::isKeyDown(GLFW_KEY_W))
+            offset += vec_forward;
+        if (Input::isKeyDown(GLFW_KEY_S))
+            offset -= vec_forward;
+
+        if (Input::isKeyDown(GLFW_KEY_SPACE))
+            offset += vec_up;
+        if (Input::isKeyDown(GLFW_KEY_LEFT_SHIFT))
+            offset -= vec_up;
+
+        offset *= speed * dt;
+
+        camera_->setPosition(camera_->getPosition() + offset);
+
+        std::cout << camera_->getPosition().x << " " << camera_->getPosition().y << " " << camera_->getPosition().z << std::endl;
+    }
+
+    // model rotation
+    {
+        constexpr float speed = glm::radians(45.f);
+
+        int rot_dir_y = 0;
+        if (Input::isKeyDown(GLFW_KEY_LEFT))
+            rot_dir_y += 1;
+        if (Input::isKeyDown(GLFW_KEY_RIGHT))
+            rot_dir_y -= 1;
+
+        int rot_dir_x = 0;
+        if (Input::isKeyDown(GLFW_KEY_UP))
+            rot_dir_x += 1;
+        if (Input::isKeyDown(GLFW_KEY_DOWN))
+            rot_dir_x -= 1;
+
+        model_mat_ = glm::rotate(model_mat_, (float)rot_dir_y * speed * dt, {0, 1, 0});
+        model_mat_ = glm::rotate(model_mat_, (float)rot_dir_x * speed * dt, {1, 0, 0});
+    }
 }
 
 void ExampleGameLogic::shutdown() {}
