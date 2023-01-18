@@ -23,6 +23,8 @@ void Engine::init(const char* name, int width, int height)
             Engine::get().update_viewport_size(width, height);
         });
 
+    glEnable(GL_DEPTH_TEST);
+
     Input::get().init();
 }
 
@@ -108,7 +110,7 @@ void Engine::update()
 
 void Engine::render()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (auto* game : game_logics_)
         game->render();

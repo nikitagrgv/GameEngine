@@ -153,8 +153,6 @@ void ExampleGameLogic::update()
         offset *= speed * dt;
 
         camera_->setPosition(camera_->getPosition() + offset);
-
-        std::cout << camera_->getPosition().x << " " << camera_->getPosition().y << " " << camera_->getPosition().z << std::endl;
     }
 
     // model rotation
