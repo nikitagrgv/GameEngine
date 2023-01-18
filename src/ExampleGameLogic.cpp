@@ -7,9 +7,6 @@
 
 #include <iostream>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
-
 void ExampleGameLogic::init()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -43,55 +40,19 @@ void ExampleGameLogic::init()
     layout.push<float>(2); // texture coordinates
     array_buffer_->addBuffer(*vertex_buffer_.get(), layout);
 
-    // ------------------------- TEXTURE1 ------------------
-    stbi_set_flip_vertically_on_load(true);
-    {
-        glGenTextures(1, &texture_);
-        glBindTexture(GL_TEXTURE_2D, texture_);
+    // ------------------------- TEXTURES ------------------
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    texture0_ = std::make_unique<Texture>("../data/textures/container.jpg");
+    texture1_ = std::make_unique<Texture>("../data/textures/awesomeface.png");
 
-        int width;
-        int height;
-        int number_channels;
-        const char* filename = "../data/textures/container.jpg";
-        unsigned char* data = stbi_load(filename, &width, &height, &number_channels, 0);
-        assert(data != nullptr);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        stbi_image_free(data);
-
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-
-    // ------------------------- TEXTURE2 ------------------
-    {
-        glGenTextures(1, &texture2_);
-        glBindTexture(GL_TEXTURE_2D, texture2_);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        int width;
-        int height;
-        int number_channels;
-        const char* filename = "../data/textures/awesomeface.png";
-        unsigned char* data = stbi_load(filename, &width, &height, &number_channels, 0);
-        assert(data != nullptr);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        stbi_image_free(data);
-
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
+    // ------------------------- UNBINDING ------------------
 
     array_buffer_->unbind();
     vertex_buffer_->unbind();
     index_buffer_->unbind();
     shader_->unbind();
+    texture0_->unbind();
+    texture1_->unbind();
 }
 
 void ExampleGameLogic::render()
@@ -100,11 +61,8 @@ void ExampleGameLogic::render()
     shader_->setUniform<int>("uTexture", 0);
     shader_->setUniform<int>("uTexture_2", 1);
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_);
-
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture2_);
+    texture0_->bind(0);
+    texture1_->bind(1);
 
     renderer_.draw(*array_buffer_.get(), *index_buffer_.get(), *shader_.get());
 

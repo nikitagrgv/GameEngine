@@ -6,6 +6,7 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "Renderer.h"
+#include "Texture.h"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -30,10 +31,10 @@ private:
     std::unique_ptr<VertexArray> array_buffer_;
     std::unique_ptr<Shader> shader_;
 
-    bool wireframe_mode_ = false;
+    std::unique_ptr<Texture> texture0_;
+    std::unique_ptr<Texture> texture1_;
 
-    unsigned int texture_;
-    unsigned int texture2_;
+    bool wireframe_mode_ = false;
 
     struct Vertex
     {
