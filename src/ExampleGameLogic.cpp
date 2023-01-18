@@ -88,7 +88,6 @@ void ExampleGameLogic::init()
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 
-
     array_buffer_->unbind();
     vertex_buffer_->unbind();
     index_buffer_->unbind();
@@ -97,9 +96,9 @@ void ExampleGameLogic::init()
 
 void ExampleGameLogic::render()
 {
-    shader_->setUniform<float>("time", (float)Engine::getTime());
-    shader_->setUniform<int>("ourTexture", 0);
-    shader_->setUniform<int>("ourTexture2", 1);
+    shader_->setUniform<float>("uTime", (float)Engine::getTime());
+    shader_->setUniform<int>("uTexture", 0);
+    shader_->setUniform<int>("uTexture_2", 1);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_);
