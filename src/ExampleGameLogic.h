@@ -42,7 +42,7 @@ private:
 
     glm::mat4 model_mat_{1};
 
-    glm::mat4 model2_mat_{glm::translate(glm::mat4(1), {1, 1, 0})};
+    glm::mat4 model2_mat_{glm::translate(glm::mat4(1), {0.6, 0.6, 0})};
 
     struct Vertex
     {

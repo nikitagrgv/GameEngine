@@ -27,6 +27,8 @@ glm::dvec2 Input::getMouseDelta()
 void Input::setCursorEnabled(bool enabled)
 {
     glfwSetInputMode(get().glfw_window_, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+    get().update();
+    get().mouse_delta_ = {0, 0};
 }
 
 int Input::addKeyPressedCallback(int key, const std::function<void()>& callback)

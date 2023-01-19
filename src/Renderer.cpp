@@ -21,3 +21,9 @@ void Renderer::draw(const VertexArray& vertex_array, const IndexBuffer& index_bu
     index_buffer.unbind();
     shader.unbind();
 }
+
+void Renderer::setBlending()
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}

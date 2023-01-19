@@ -76,6 +76,9 @@ void ExampleGameLogic::init()
 
     camera_ = std::make_unique<Camera>(fov, aspect, z_near, z_far);
     camera_->setPosition(vec_forward * -2.f);
+
+    // ------------------------- RENDERER ------------------
+    renderer_.setBlending();
 }
 
 void ExampleGameLogic::render()
@@ -100,12 +103,11 @@ void ExampleGameLogic::render()
         const auto transform_ = camera_->getProjection() * camera_->getView() * model2_mat_;
 
         shader_->setUniform<float>("uTime", (float)Engine::getTime());
-        shader_->setUniform<int>("uTexture", 0);
-        shader_->setUniform<int>("uTexture_2", 1);
+        shader_->setUniform<int>("uTexture_2", 0);
         shader_->setUniform<const glm::mat4&>("uTransform", transform_);
 
-        texture0_->bind(0);
-        texture1_->bind(1);
+        texture0_->unbind();
+        texture1_->bind(0);
 
         renderer_.draw(*array_buffer_, *index_buffer_, *shader_);
     }
@@ -117,12 +119,11 @@ void ExampleGameLogic::update()
 {
     const float dt = (float)Engine::getDelta();
 
-
-    std::cout << Input::getMouseDelta().x << "  " <<  Input::getMouseDelta().y << std::endl;
-
     // camera rotation
     if (Input::isMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
     {
+        std::cout << Input::getMouseDelta().x << "  " <<  Input::getMouseDelta().y << std::endl;
+
         constexpr float speed = glm::radians(0.1f);
 
         const auto mouse_delta = Input::getMouseDelta();

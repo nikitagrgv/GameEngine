@@ -16,7 +16,7 @@ public:
 
     glm::mat4 getProjection() const { return projection_; }
     void setProjection(const glm::mat4 projection) { projection_ = projection; }
-    void setProjection(float fov, float aspect, float z_near, float z_far);
+    void setPerspectiveProjection(float fov, float aspect, float z_near, float z_far);
 
     float getPitch() const { return pitch_; }
     void setPitch(float pitch) { pitch_ = pitch; update_all_matrices(); }

@@ -4,7 +4,7 @@
 
 Camera::Camera(float fov, float aspect, float z_near, float z_far)
 {
-    setProjection(fov, aspect, z_near, z_far);
+    setPerspectiveProjection(fov, aspect, z_near, z_far);
     update_all_matrices();
 }
 
@@ -32,7 +32,7 @@ void Camera::update_view_matrix()
     view_matrix_ = glm::inverse(transform_);
 }
 
-void Camera::setProjection(float fov, float aspect, float z_near, float z_far)
+void Camera::setPerspectiveProjection(float fov, float aspect, float z_near, float z_far)
 {
     projection_ = glm::perspective(fov, aspect, z_near, z_far);
 }
