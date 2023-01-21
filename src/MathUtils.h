@@ -11,31 +11,30 @@ constexpr glm::vec3 vec_right{1.f, 0.f, 0.f};
 
 inline glm::vec3 getUp(const glm::mat3& transform)
 {
-    return transform * vec_up;
+    return glm::normalize(transform[1]);
 }
 
 inline glm::vec3 getForward(const glm::mat3& transform)
 {
-    return transform * vec_forward;
+    return glm::normalize(-transform[2]);
 }
 
 inline glm::vec3 getRight(const glm::mat3& transform)
 {
-    return transform * vec_right;
+    return glm::normalize(transform[0]);
 }
 
 inline glm::vec3 getUp(const glm::mat4& transform)
 {
-    return getUp(glm::mat3(transform));
+    return glm::normalize(glm::vec3(transform[1]));
 }
 
 inline glm::vec3 getForward(const glm::mat4& transform)
 {
-    return getForward(glm::mat3(transform));
+    return glm::normalize(glm::vec3(-transform[2]));
 }
 
 inline glm::vec3 getRight(const glm::mat4& transform)
 {
-    return getRight(glm::mat3(transform));
+    return glm::normalize(glm::vec3(transform[0]));
 }
-
