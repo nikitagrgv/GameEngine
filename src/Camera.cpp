@@ -19,8 +19,8 @@ void Camera::update_transform()
 {
     using namespace glm;
 
-    const mat4 matrix_rotate_pitch = rotate(mat4(1), pitch_, vec_right);
-    const mat4 matrix_rotate_yaw = rotate(mat4(1), yaw_, vec_up);
+    const mat4 matrix_rotate_pitch = rotate(mat4(1), pitch_, VEC_RIGHT);
+    const mat4 matrix_rotate_yaw = rotate(mat4(1), yaw_, VEC_UP);
 
     const mat4 matrix_translate = translate(mat4(1), position_);
 

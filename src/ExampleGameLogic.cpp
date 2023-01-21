@@ -75,7 +75,7 @@ void ExampleGameLogic::init()
     const float z_far = 10000.f;
 
     camera_ = std::make_unique<Camera>(fov, aspect, z_near, z_far);
-    camera_->setPosition(vec_forward * -2.f);
+    camera_->setPosition(VEC_FORWARD * -2.f);
 
     // ------------------------- RENDERER ------------------
     renderer_.setBlending();
