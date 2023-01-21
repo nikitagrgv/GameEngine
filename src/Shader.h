@@ -11,6 +11,8 @@
 #include <string>
 #include <unordered_map>
 
+#include <glm/gtc/type_ptr.hpp>
+
 class Shader
 {
 public:
@@ -87,14 +89,14 @@ public:
     void setUniform(int location, const glm::mat3& value)
     {
         bind();
-        glUniformMatrix3fv(location, 1, false, &value[0][0]);
+        glUniformMatrix3fv(location, 1, false, glm::value_ptr(value));
     }
 
     template<>
     void setUniform(int location, const glm::mat4& value)
     {
         bind();
-        glUniformMatrix4fv(location, 1, false, &value[0][0]);
+        glUniformMatrix4fv(location, 1, false, glm::value_ptr(value));
     }
 
     // -------------------------------------------------------
