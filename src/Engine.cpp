@@ -75,7 +75,10 @@ void Engine::removeGameLogic(GameLogic* game_logic)
         game_logic);
 
     if (iterator != game_logics_.end())
+    {
+        (*iterator)->shutdown();
         game_logics_.erase(iterator);
+    }
 }
 
 double Engine::getTime()
