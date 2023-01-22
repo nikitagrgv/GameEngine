@@ -1,8 +1,8 @@
 #include "IndexBuffer.h"
 
 // clang-format off
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
 // clang-format on
 
 IndexBuffer::IndexBuffer(const unsigned int* data, int count)

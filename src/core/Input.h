@@ -1,9 +1,8 @@
 #pragma once
 
+#include "glm/vec2.hpp"
 #include <functional>
 #include <vector>
-
-#include <glm/vec2.hpp>
 
 struct GLFWwindow;
 

@@ -1,7 +1,7 @@
 #pragma once
 
 // clang-format off
-#include <glad/glad.h>
+#include "glad/glad.h"
 // clang-format on
 
 #define GL_CHECK_ERROR()                                                                           \

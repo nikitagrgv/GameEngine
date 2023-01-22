@@ -1,7 +1,7 @@
 #include "Texture.h"
 
 // clang-format off
-#include <glad/glad.h>
+#include "glad/glad.h"
 // clang-format on
 
 #define STB_IMAGE_IMPLEMENTATION

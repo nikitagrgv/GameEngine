@@ -1,17 +1,16 @@
 #pragma once
 
-#include "FileManager.h"
+#include "../core/FileManager.h"
 
 // clang-format off
-#include <glad/glad.h>
+#include "glad/glad.h"
 // clang-format on
 
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 #include <iostream>
 #include <string>
 #include <unordered_map>
-
-#include <glm/gtc/type_ptr.hpp>
 
 class Shader
 {
