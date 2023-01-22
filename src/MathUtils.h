@@ -2,12 +2,12 @@
 
 #include <glm/glm.hpp>
 
+namespace Math
+{
+
 constexpr glm::vec3 VEC_UP{0.f, 1.f, 0.f};
 constexpr glm::vec3 VEC_FORWARD{0.f, 0.f, -1.f};
 constexpr glm::vec3 VEC_RIGHT{1.f, 0.f, 0.f};
-
-
-// TODO optimize
 
 inline glm::vec3 getUp(const glm::mat3& transform)
 {
@@ -38,3 +38,5 @@ inline glm::vec3 getRight(const glm::mat4& transform)
 {
     return glm::normalize(glm::vec3(transform[0]));
 }
+
+} // namespace Math

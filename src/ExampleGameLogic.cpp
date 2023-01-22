@@ -82,7 +82,7 @@ void ExampleGameLogic::init()
     const float z_far = 10000.f;
 
     camera_ = std::make_unique<Camera>(fov, aspect, z_near, z_far);
-    camera_->setPosition(VEC_FORWARD * -2.f);
+    camera_->setPosition(Math::VEC_FORWARD * -2.f);
 
     // ------------------------- RENDERER ------------------
     renderer_.setBlending();
@@ -164,19 +164,19 @@ void ExampleGameLogic::update()
         glm::vec3 offset{};
 
         if (input.isKeyDown(GLFW_KEY_D))
-            offset += getRight(camera_->getTransform());
+            offset += Math::getRight(camera_->getTransform());
         if (input.isKeyDown(GLFW_KEY_A))
-            offset -= getRight(camera_->getTransform());
+            offset -= Math::getRight(camera_->getTransform());
 
         if (input.isKeyDown(GLFW_KEY_W))
-            offset += getForward(camera_->getTransform());
+            offset += Math::getForward(camera_->getTransform());
         if (input.isKeyDown(GLFW_KEY_S))
-            offset -= getForward(camera_->getTransform());
+            offset -= Math::getForward(camera_->getTransform());
 
         if (input.isKeyDown(GLFW_KEY_SPACE))
-            offset += getUp(camera_->getTransform());
+            offset += Math::getUp(camera_->getTransform());
         if (input.isKeyDown(GLFW_KEY_LEFT_SHIFT))
-            offset -= getUp(camera_->getTransform());
+            offset -= Math::getUp(camera_->getTransform());
 
         offset *= speed * dt;
 
