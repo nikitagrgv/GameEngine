@@ -36,9 +36,14 @@ public:
         }
     }
 
-    T& getObject(int index) const
+    const T& getObject(int index) const
     {
-        return objects_[index];
+        return objects_[index].obj;
+    }
+
+    T& getObject(int index)
+    {
+        return objects_[index].obj;
     }
 
     int getNumObject() const

@@ -106,8 +106,9 @@ Input& Input::get()
 
 void Input::glfw_key_callback(int key, int scancode, int action, int mods)
 {
-    for (auto& callback : key_callbacks_)
+    for (int i = 0; i < key_callbacks_.getNumObject(); i++)
     {
+        auto& callback = key_callbacks_.getObject(i);
         if (callback.key != getKeyFromGLFW(key))
             continue;
 
@@ -118,8 +119,10 @@ void Input::glfw_key_callback(int key, int scancode, int action, int mods)
 
 void Input::glfw_mouse_button_callback(int button, int action, int mods)
 {
-    for (auto& callback : mouse_button_callbacks_)
+    for (int i = 0; i < mouse_button_callbacks_.getNumObject(); i++)
     {
+        auto& callback = mouse_button_callbacks_.getObject(i);
+
         if (callback.button != getMouseButtonFromGLFW(button))
             continue;
 
