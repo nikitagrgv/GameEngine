@@ -1,10 +1,11 @@
 #pragma once
 
+#include "IdContainer.h"
+#include "InputEnums.h"
+
 #include "glm/vec2.hpp"
 #include <functional>
 #include <vector>
-
-#include "InputEnums.h"
 
 struct GLFWwindow;
 
@@ -43,12 +44,6 @@ private:
     void glfw_key_callback(int key, int scancode, int action, int mods);
     void glfw_mouse_button_callback(int button, int action, int mods);
 
-    int generate_id_key() const;
-    bool has_id_key(int id) const;
-
-    int generate_id_mouse_button() const;
-    bool has_id_mouse_button(int id) const;
-
 private:
     GLFWwindow* glfw_window_{nullptr};
 
@@ -57,19 +52,17 @@ private:
 
     struct KeyCallback
     {
-        int callback_id;
         Key key;
         int action; // pressed or released
         std::function<void()> callback;
     };
-    std::vector<KeyCallback> key_callbacks_;
+    IdContainer<KeyCallback> key_callbacks_;
 
     struct MouseButtonCallback
     {
-        int callback_id;
         MouseButton button;
         int action; // pressed or released
         std::function<void()> callback;
     };
-    std::vector<MouseButtonCallback> mouse_button_callbacks_;
+    IdContainer<MouseButtonCallback> mouse_button_callbacks_;
 };

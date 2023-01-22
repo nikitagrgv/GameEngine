@@ -64,7 +64,7 @@ add_executable(LearnOpenGL
         src/core/events/Event.h
         src/core/events/InputEvents.h
         src/core/InputEnums.h
-        )
+        src/core/events/EventSystem.cpp src/core/events/EventSystem.h src/core/IdContainer.h)
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
 

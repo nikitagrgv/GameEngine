@@ -16,7 +16,7 @@ enum class EventType
 #define DECLARE_EVENT_METHODS(type)                                                                \
     static EventType getStaticType()                                                               \
     {                                                                                              \
-        return EventType::##type;                                                                  \
+        return EventType::type;                                                                    \
     }                                                                                              \
     virtual EventType getEventType() const override                                                \
     {                                                                                              \
