@@ -45,7 +45,7 @@ void ExampleGameLogic::init()
     array_buffer_->bind();
     GL_CHECK_ERROR();
 
-    index_buffer_ = std::make_unique<IndexBuffer>(indices_, 6);
+    index_buffer_ = std::make_unique<IndexBuffer>(indices_, sizeof(indices_) / sizeof(indices_[0]));
     vertex_buffer_ = std::make_unique<VertexBuffer>(vertices_, sizeof(vertices_));
     VertexBufferLayout layout;
     layout.push<float>(3); // position
@@ -103,11 +103,12 @@ void ExampleGameLogic::render()
         const auto transform_ = camera_->getProjection() * camera_->getView() * model2_mat_;
 
         shader_->setUniform<float>("uTime", (float)Engine::getTime());
-        shader_->setUniform<int>("uTexture_2", 0);
+        shader_->setUniform<int>("uTexture", 0);
+        shader_->setUniform<int>("uTexture_2", 1);
         shader_->setUniform<const glm::mat4&>("uTransform", transform_);
 
-        texture0_->unbind();
-        texture1_->bind(0);
+        texture0_->bind(0);
+        texture1_->bind(1);
 
         renderer_.draw(*array_buffer_, *index_buffer_, *shader_);
     }

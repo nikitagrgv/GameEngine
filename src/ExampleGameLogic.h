@@ -51,15 +51,35 @@ private:
         glm::vec2 texture_coordinates;
     };
 
-    const Vertex vertices_[4]{
-        {  {0.5f, 0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // top right
-        { {0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // bottom right
-        {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // bottom left
-        { {-0.5f, 0.5f, 0.0f}, {0.8f, 0.1f, 0.8f}, {0.0f, 1.0f}}  // top left
+    const Vertex vertices_[12]{
+        // far plane
+        {  {0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // top right
+        { {0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // bottom right
+        {{-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // bottom left
+        { {-0.5f, 0.5f, 0.5f}, {0.8f, 0.1f, 0.8f}, {0.0f, 1.0f}}, // top left
+        // near plane
+        {  {0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // top right
+        { {0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // bottom right
+        {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // bottom left
+        { {-0.5f, 0.5f, -0.5f}, {0.8f, 0.1f, 0.8f}, {0.0f, 1.0f}}, // top left
+        // right plane
+        {  {0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // top right far
+        { {0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // bottom right far
+        { {0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}, // bottom right near
+        {  {0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // top right near
+
+
     };
 
-    const unsigned int indices_[6] = {
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
+    const unsigned int indices_[18] = {
+        // far plane
+        0, 1, 3,
+        1, 2, 3,
+        // near plane
+        4, 5, 7,
+        5, 6, 7,
+        // right plane
+        8, 9, 11,
+        9, 10, 11
     };
 };
