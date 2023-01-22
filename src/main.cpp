@@ -5,12 +5,14 @@
 
 int main()
 {
-    Engine::init("Engine", 800, 600);
+    auto& engine = Engine::get(); 
+
+    engine.init("Engine", 800, 600);
 
     ExampleGameLogic game_logic;
-    Engine::addGameLogic(&game_logic);
+    engine.addGameLogic(&game_logic);
 
-    Engine::run();
+    engine.run();
 
     return 0;
 }

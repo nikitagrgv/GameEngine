@@ -18,21 +18,21 @@ class Engine final
 public:
     static Engine& get();
 
-    static void init(const char* name, int width, int height);
-    static void run();
-    static void shutdownLater();
+    void init(const char* name, int width, int height);
+    void run();
+    void shutdownLater();
 
-    static void addGameLogic(GameLogic* game_logic);
-    static void removeGameLogic(GameLogic* game_logic);
+    void addGameLogic(GameLogic* game_logic);
+    void removeGameLogic(GameLogic* game_logic);
 
-    static double getTime();
-    static double getDelta();
-    static double getFps();
+    double getTime();
+    double getDelta();
+    double getFps();
 
-    static double getWidth();
-    static double getHeight();
+    double getWidth();
+    double getHeight();
 
-    static void* getWindow();
+    void* getWindow();
 
 private:
     Engine() = default;

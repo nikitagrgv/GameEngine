@@ -21,26 +21,26 @@ void ExampleGameLogic::init()
     imgui_init();
 
     // CONTROLS CALLBACKS
-    Input::addKeyPressedCallback(GLFW_KEY_ESCAPE, []() {
-        Engine::shutdownLater();
+    input.addKeyPressedCallback(GLFW_KEY_ESCAPE, []() {
+        Engine::get().shutdownLater();
     });
 
-    Input::addKeyPressedCallback(GLFW_KEY_F1, [this]() {
+    input.addKeyPressedCallback(GLFW_KEY_F1, [this]() {
         wireframe_mode_ = !wireframe_mode_;
         std::cout << "Wireframe mode: " << wireframe_mode_ << std::endl;
 
     });
 
-    Input::addKeyPressedCallback(GLFW_KEY_R, [this]() {
+    input.addKeyPressedCallback(GLFW_KEY_R, [this]() {
         std::cout << "Recompile all shaders..." << std::endl;
         compile_shaders();
     });
 
-    Input::addMouseButtonPressedCallback(GLFW_MOUSE_BUTTON_RIGHT, [this]() {
-        Input::setCursorEnabled(false);
+    input.addMouseButtonPressedCallback(GLFW_MOUSE_BUTTON_RIGHT, [this]() {
+        input.setCursorEnabled(false);
     });
-    Input::addMouseButtonReleasedCallback(GLFW_MOUSE_BUTTON_RIGHT, [this]() {
-        Input::setCursorEnabled(true);
+    input.addMouseButtonReleasedCallback(GLFW_MOUSE_BUTTON_RIGHT, [this]() {
+        input.setCursorEnabled(true);
     });
 
 
@@ -77,7 +77,7 @@ void ExampleGameLogic::init()
     // ------------------------- CAMERA ------------------
 
     const auto fov = glm::radians(60.f);
-    const float aspect = (float)Engine::getWidth() / (float)Engine::getHeight();
+    const float aspect = (float)engine.getWidth() / (float)engine.getHeight();
     const float z_near = 0.1f;
     const float z_far = 10000.f;
 
@@ -94,7 +94,7 @@ void ExampleGameLogic::render()
     {
         const auto transform_ = camera_->getProjection() * camera_->getView() * model_mat_;
 
-        shader_->setUniform<float>("uTime", (float)Engine::getTime());
+        shader_->setUniform<float>("uTime", (float)engine.getTime());
         shader_->setUniform<int>("uTexture", 0);
         shader_->setUniform<int>("uTexture_2", 1);
         shader_->setUniform<const glm::mat4&>("uTransform", transform_);
@@ -109,7 +109,7 @@ void ExampleGameLogic::render()
     {
         const auto transform_ = camera_->getProjection() * camera_->getView() * model2_mat_;
 
-        shader_->setUniform<float>("uTime", (float)Engine::getTime());
+        shader_->setUniform<float>("uTime", (float)engine.getTime());
         shader_->setUniform<int>("uTexture", 0);
         shader_->setUniform<int>("uTexture_2", 1);
         shader_->setUniform<const glm::mat4&>("uTransform", transform_);
@@ -134,7 +134,7 @@ void ExampleGameLogic::imgui_draw()
         glPolygonMode(GL_FRONT_AND_BACK, wireframe_mode_ ? GL_LINE : GL_FILL);
 
     std::string fps_text = "FPS: ";
-    fps_text += std::to_string(Engine::getFps());
+    fps_text += std::to_string(engine.getFps());
     ImGui::Text(fps_text.c_str());
     ImGui::End();
 
@@ -142,16 +142,16 @@ void ExampleGameLogic::imgui_draw()
 
 void ExampleGameLogic::update()
 {
-    const float dt = (float)Engine::getDelta();
+    const float dt = (float)engine.getDelta();
 
     // camera rotation
-    if (Input::isMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
+    if (input.isMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
     {
-        std::cout << Input::getMouseDelta().x << "  " <<  Input::getMouseDelta().y << std::endl;
+        std::cout << input.getMouseDelta().x << "  " <<  input.getMouseDelta().y << std::endl;
 
         constexpr float speed = glm::radians(0.1f);
 
-        const auto mouse_delta = Input::getMouseDelta();
+        const auto mouse_delta = input.getMouseDelta();
 
         camera_->setYaw(camera_->getYaw() + (float)-mouse_delta.x * speed);
         camera_->setPitch(camera_->getPitch() + (float)-mouse_delta.y * speed);
@@ -163,19 +163,19 @@ void ExampleGameLogic::update()
 
         glm::vec3 offset{};
 
-        if (Input::isKeyDown(GLFW_KEY_D))
+        if (input.isKeyDown(GLFW_KEY_D))
             offset += getRight(camera_->getTransform());
-        if (Input::isKeyDown(GLFW_KEY_A))
+        if (input.isKeyDown(GLFW_KEY_A))
             offset -= getRight(camera_->getTransform());
 
-        if (Input::isKeyDown(GLFW_KEY_W))
+        if (input.isKeyDown(GLFW_KEY_W))
             offset += getForward(camera_->getTransform());
-        if (Input::isKeyDown(GLFW_KEY_S))
+        if (input.isKeyDown(GLFW_KEY_S))
             offset -= getForward(camera_->getTransform());
 
-        if (Input::isKeyDown(GLFW_KEY_SPACE))
+        if (input.isKeyDown(GLFW_KEY_SPACE))
             offset += getUp(camera_->getTransform());
-        if (Input::isKeyDown(GLFW_KEY_LEFT_SHIFT))
+        if (input.isKeyDown(GLFW_KEY_LEFT_SHIFT))
             offset -= getUp(camera_->getTransform());
 
         offset *= speed * dt;
@@ -188,15 +188,15 @@ void ExampleGameLogic::update()
         constexpr float speed = glm::radians(45.f);
 
         int rot_dir_y = 0;
-        if (Input::isKeyDown(GLFW_KEY_1))
+        if (input.isKeyDown(GLFW_KEY_1))
             rot_dir_y += 1;
-        if (Input::isKeyDown(GLFW_KEY_2))
+        if (input.isKeyDown(GLFW_KEY_2))
             rot_dir_y -= 1;
 
         int rot_dir_x = 0;
-        if (Input::isKeyDown(GLFW_KEY_3))
+        if (input.isKeyDown(GLFW_KEY_3))
             rot_dir_x += 1;
-        if (Input::isKeyDown(GLFW_KEY_4))
+        if (input.isKeyDown(GLFW_KEY_4))
             rot_dir_x -= 1;
 
         model_mat_ = glm::rotate(model_mat_, (float)rot_dir_y * speed * dt, {0, 1, 0});
@@ -216,7 +216,7 @@ void ExampleGameLogic::imgui_init()
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
     ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)Engine::getWindow(), true);
+    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)engine.getWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 130");
 }
 

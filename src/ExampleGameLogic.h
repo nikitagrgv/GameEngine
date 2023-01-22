@@ -8,6 +8,8 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "Camera.h"
+#include "Input.h"
+#include "Engine.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -32,6 +34,9 @@ private:
     void compile_shaders();
 
 private:
+    Input& input{Input::get()};
+    Engine& engine{Engine::get()};
+
     Renderer renderer_;
 
     std::unique_ptr<IndexBuffer> index_buffer_;

@@ -4,42 +4,42 @@
 
 bool Input::isKeyDown(int key)
 {
-    return glfwGetKey(get().glfw_window_, key);
+    return glfwGetKey(glfw_window_, key);
 }
 
 bool Input::isMouseButtonDown(int button)
 {
-    return glfwGetMouseButton(get().glfw_window_, button);
+    return glfwGetMouseButton(glfw_window_, button);
 }
 
 glm::dvec2 Input::getMousePosition()
 {
     glm::dvec2 pos;
-    glfwGetCursorPos(get().glfw_window_, &pos.x, &pos.y);
+    glfwGetCursorPos(glfw_window_, &pos.x, &pos.y);
     return pos;
 }
 
 glm::dvec2 Input::getMouseDelta()
 {
-    return get().mouse_delta_;
+    return mouse_delta_;
 }
 
 void Input::setCursorEnabled(bool enabled)
 {
-    glfwSetInputMode(get().glfw_window_, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
-    get().update();
-    get().mouse_delta_ = {0, 0};
+    glfwSetInputMode(glfw_window_, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+    update();
+    mouse_delta_ = {0, 0};
 }
 
 int Input::addKeyPressedCallback(int key, const std::function<void()>& callback)
 {
     KeyCallback key_callback;
-    key_callback.callback_id = get().generate_id_key();
+    key_callback.callback_id = generate_id_key();
     key_callback.key = key;
     key_callback.callback = callback;
     key_callback.action = GLFW_PRESS;
 
-    get().key_callbacks_.push_back(key_callback);
+    key_callbacks_.push_back(key_callback);
 
     return key_callback.callback_id;
 }
@@ -47,23 +47,23 @@ int Input::addKeyPressedCallback(int key, const std::function<void()>& callback)
 int Input::addKeyReleasedCallback(int key, const std::function<void()>& callback)
 {
     KeyCallback key_callback;
-    key_callback.callback_id = get().generate_id_key();
+    key_callback.callback_id = generate_id_key();
     key_callback.key = key;
     key_callback.callback = callback;
     key_callback.action = GLFW_RELEASE;
 
-    get().key_callbacks_.push_back(key_callback);
+    key_callbacks_.push_back(key_callback);
 
     return key_callback.callback_id;
 }
 
 void Input::removeKeyCallback(int callback_id)
 {
-    for (int i = 0; i < get().key_callbacks_.size(); i++)
+    for (int i = 0; i < key_callbacks_.size(); i++)
     {
-        if (get().key_callbacks_[i].callback_id == callback_id)
+        if (key_callbacks_[i].callback_id == callback_id)
         {
-            get().key_callbacks_.erase(get().key_callbacks_.begin() + i);
+            key_callbacks_.erase(key_callbacks_.begin() + i);
             return;
         }
     }
@@ -72,12 +72,12 @@ void Input::removeKeyCallback(int callback_id)
 int Input::addMouseButtonPressedCallback(int button, const std::function<void()>& callback)
 {
     MouseButtonCallback mouse_button_callback;
-    mouse_button_callback.callback_id = get().generate_id_key();
+    mouse_button_callback.callback_id = generate_id_key();
     mouse_button_callback.button = button;
     mouse_button_callback.callback = callback;
     mouse_button_callback.action = GLFW_PRESS;
 
-    get().mouse_button_callbacks_.push_back(mouse_button_callback);
+    mouse_button_callbacks_.push_back(mouse_button_callback);
 
     return mouse_button_callback.callback_id;
 }
@@ -85,23 +85,23 @@ int Input::addMouseButtonPressedCallback(int button, const std::function<void()>
 int Input::addMouseButtonReleasedCallback(int button, const std::function<void()>& callback)
 {
     MouseButtonCallback mouse_button_callback;
-    mouse_button_callback.callback_id = get().generate_id_key();
+    mouse_button_callback.callback_id = generate_id_key();
     mouse_button_callback.button = button;
     mouse_button_callback.callback = callback;
     mouse_button_callback.action = GLFW_RELEASE;
 
-    get().mouse_button_callbacks_.push_back(mouse_button_callback);
+    mouse_button_callbacks_.push_back(mouse_button_callback);
 
     return mouse_button_callback.callback_id;
 }
 
 void Input::removeMouseButtonCallback(int callback_id)
 {
-    for (int i = 0; i < get().key_callbacks_.size(); i++)
+    for (int i = 0; i < key_callbacks_.size(); i++)
     {
-        if (get().key_callbacks_[i].callback_id == callback_id)
+        if (key_callbacks_[i].callback_id == callback_id)
         {
-            get().key_callbacks_.erase(get().key_callbacks_.begin() + i);
+            key_callbacks_.erase(key_callbacks_.begin() + i);
             return;
         }
     }
@@ -110,8 +110,15 @@ void Input::removeMouseButtonCallback(int callback_id)
 void Input::init()
 {
     glfw_window_ = Engine::get().glfw_window_;
-    glfwSetKeyCallback(glfw_window_, &Input::glfw_key_callback);
-    glfwSetMouseButtonCallback(glfw_window_, &Input::glfw_mouse_button_callback);
+    glfwSetKeyCallback(glfw_window_, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        Input::get().glfw_key_callback(key, scancode, action, mods);
+    });
+    
+    glfwSetMouseButtonCallback(glfw_window_, [](GLFWwindow* window, int button, int action, int mods)
+    {
+        Input::get().glfw_mouse_button_callback(button, action, mods);
+    });
 }
 
 void Input::update()
@@ -167,9 +174,9 @@ bool Input::has_id_mouse_button(int id) const
     return false;
 }
 
-void Input::glfw_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void Input::glfw_key_callback(int key, int scancode, int action, int mods)
 {
-    for (auto& callback : get().key_callbacks_)
+    for (auto& callback : key_callbacks_)
     {
         if (callback.key != key)
             continue;
@@ -179,9 +186,9 @@ void Input::glfw_key_callback(GLFWwindow* window, int key, int scancode, int act
     }
 }
 
-void Input::glfw_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+void Input::glfw_mouse_button_callback(int button, int action, int mods)
 {
-    for (auto& callback : get().mouse_button_callbacks_)
+    for (auto& callback : mouse_button_callbacks_)
     {
         if (callback.button != button)
             continue;
