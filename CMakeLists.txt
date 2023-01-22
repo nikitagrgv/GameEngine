@@ -7,6 +7,26 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
 add_executable(LearnOpenGL
+
+        # imgui
+        src/imgui/imconfig.h
+        src/imgui/imgui_demo.cpp
+        src/imgui/imgui_draw.cpp
+        src/imgui/imgui_internal.h
+        src/imgui/imgui_tables.cpp
+        src/imgui/imgui_widgets.cpp
+        src/imgui/imgui.cpp
+        src/imgui/imgui.h
+        src/imgui/imstb_rectpack.h
+        src/imgui/imstb_textedit.h
+        src/imgui/imstb_truetype.h
+        src/imgui/imgui_impl_glfw.cpp
+        src/imgui/imgui_impl_glfw.h
+        src/imgui/imgui_impl_opengl3.h
+        src/imgui/imgui_impl_opengl3.cpp
+        src/imgui/imgui_impl_opengl3_loader.h
+        # end imgui
+
         src/main.cpp
         src/glad/glad.c
         src/Engine.cpp

@@ -27,9 +27,12 @@ public:
 
     static double getTime();
     static double getDelta();
+    static double getFps();
 
     static double getWidth();
     static double getHeight();
+
+    static void* getWindow();
 
 private:
     Engine() = default;

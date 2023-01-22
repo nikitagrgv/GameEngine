@@ -88,6 +88,11 @@ double Engine::getDelta()
     return get().delta_time_;
 }
 
+double Engine::getFps()
+{
+    return 1. / getDelta();
+}
+
 double Engine::getWidth()
 {
     return get().width_;
@@ -96,6 +101,11 @@ double Engine::getWidth()
 double Engine::getHeight()
 {
     return get().height_;
+}
+
+void* Engine::getWindow()
+{
+    return get().glfw_window_;
 }
 
 void Engine::shutdownLater()

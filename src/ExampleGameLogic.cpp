@@ -6,11 +6,19 @@
 #include "OpenGLUtils.h"
 #include "MathUtils.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
+#include <GLFW/glfw3.h>
+
 #include <iostream>
 
 void ExampleGameLogic::init()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+    imgui_init();
 
     // CONTROLS CALLBACKS
     Input::addKeyPressedCallback(GLFW_KEY_ESCAPE, []() {
@@ -21,7 +29,6 @@ void ExampleGameLogic::init()
         wireframe_mode_ = !wireframe_mode_;
         std::cout << "Wireframe mode: " << wireframe_mode_ << std::endl;
 
-        glPolygonMode(GL_FRONT_AND_BACK, wireframe_mode_ ? GL_LINE : GL_FILL);
     });
 
     Input::addKeyPressedCallback(GLFW_KEY_R, [this]() {
@@ -114,6 +121,23 @@ void ExampleGameLogic::render()
     }
 
     GL_CHECK_ERROR();
+
+    imgui_before_draw();
+    imgui_draw();
+    imgui_after_draw();
+}
+
+void ExampleGameLogic::imgui_draw()
+{
+    ImGui::Begin("Another Window");
+    if (ImGui::Checkbox("Wireframe mode", &wireframe_mode_))
+        glPolygonMode(GL_FRONT_AND_BACK, wireframe_mode_ ? GL_LINE : GL_FILL);
+
+    std::string fps_text = "FPS: ";
+    fps_text += std::to_string(Engine::getFps());
+    ImGui::Text(fps_text.c_str());
+    ImGui::End();
+
 }
 
 void ExampleGameLogic::update()
@@ -180,7 +204,41 @@ void ExampleGameLogic::update()
     }
 }
 
-void ExampleGameLogic::shutdown() {}
+void ExampleGameLogic::shutdown()
+{
+    imgui_shutdown();
+}
+
+void ExampleGameLogic::imgui_init()
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)Engine::getWindow(), true);
+    ImGui_ImplOpenGL3_Init("#version 130");
+}
+
+void ExampleGameLogic::imgui_shutdown()
+{
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+}
+
+void ExampleGameLogic::imgui_before_draw()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
+void ExampleGameLogic::imgui_after_draw()
+{
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
 
 void ExampleGameLogic::compile_shaders()
 {

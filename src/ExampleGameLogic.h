@@ -23,6 +23,12 @@ public:
     void shutdown() override;
 
 private:
+    void imgui_init();
+    void imgui_shutdown();
+    void imgui_before_draw();
+    void imgui_draw();
+    void imgui_after_draw();
+
     void compile_shaders();
 
 private:
