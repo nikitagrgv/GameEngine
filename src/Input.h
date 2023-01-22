@@ -5,7 +5,7 @@
 
 #include <glm/vec2.hpp>
 
-class GLFWwindow;
+struct GLFWwindow;
 
 // TODO refactor this! it's very dirty now. use some event system instead
 
