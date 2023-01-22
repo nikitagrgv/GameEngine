@@ -2,14 +2,14 @@
 
 #include "Engine.h"
 
-bool Input::isKeyDown(int key)
+bool Input::isKeyDown(Key key)
 {
-    return glfwGetKey(glfw_window_, key);
+    return glfwGetKey(glfw_window_, getGLFWKey(key));
 }
 
-bool Input::isMouseButtonDown(int button)
+bool Input::isMouseButtonDown(MouseButton button)
 {
-    return glfwGetMouseButton(glfw_window_, button);
+    return glfwGetMouseButton(glfw_window_, getGLFWMouseButton(button));
 }
 
 glm::dvec2 Input::getMousePosition()
@@ -31,7 +31,7 @@ void Input::setCursorEnabled(bool enabled)
     mouse_delta_ = {0, 0};
 }
 
-int Input::addKeyPressedCallback(int key, const std::function<void()>& callback)
+int Input::addKeyPressedCallback(Key key, const std::function<void()>& callback)
 {
     KeyCallback key_callback;
     key_callback.callback_id = generate_id_key();
@@ -44,7 +44,7 @@ int Input::addKeyPressedCallback(int key, const std::function<void()>& callback)
     return key_callback.callback_id;
 }
 
-int Input::addKeyReleasedCallback(int key, const std::function<void()>& callback)
+int Input::addKeyReleasedCallback(Key key, const std::function<void()>& callback)
 {
     KeyCallback key_callback;
     key_callback.callback_id = generate_id_key();
@@ -69,7 +69,7 @@ void Input::removeKeyCallback(int callback_id)
     }
 }
 
-int Input::addMouseButtonPressedCallback(int button, const std::function<void()>& callback)
+int Input::addMouseButtonPressedCallback(MouseButton button, const std::function<void()>& callback)
 {
     MouseButtonCallback mouse_button_callback;
     mouse_button_callback.callback_id = generate_id_key();
@@ -82,7 +82,7 @@ int Input::addMouseButtonPressedCallback(int button, const std::function<void()>
     return mouse_button_callback.callback_id;
 }
 
-int Input::addMouseButtonReleasedCallback(int button, const std::function<void()>& callback)
+int Input::addMouseButtonReleasedCallback(MouseButton button, const std::function<void()>& callback)
 {
     MouseButtonCallback mouse_button_callback;
     mouse_button_callback.callback_id = generate_id_key();
@@ -178,7 +178,7 @@ void Input::glfw_key_callback(int key, int scancode, int action, int mods)
 {
     for (auto& callback : key_callbacks_)
     {
-        if (callback.key != key)
+        if (callback.key != getKeyFromGLFW(key))
             continue;
 
         if (callback.action == action)
@@ -190,7 +190,7 @@ void Input::glfw_mouse_button_callback(int button, int action, int mods)
 {
     for (auto& callback : mouse_button_callbacks_)
     {
-        if (callback.button != button)
+        if (callback.button != getMouseButtonFromGLFW(button))
             continue;
 
         if (callback.action == action)

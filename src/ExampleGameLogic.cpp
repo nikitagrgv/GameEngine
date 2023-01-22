@@ -20,25 +20,25 @@ void ExampleGameLogic::init()
     imgui_init();
 
     // CONTROLS CALLBACKS
-    input.addKeyPressedCallback(GLFW_KEY_ESCAPE, []() {
+    input.addKeyPressedCallback(Key::KEY_ESCAPE, []() {
         Engine::get().shutdownLater();
     });
 
-    input.addKeyPressedCallback(GLFW_KEY_F1, [this]() {
+    input.addKeyPressedCallback(Key::KEY_F1, [this]() {
         wireframe_mode_ = !wireframe_mode_;
         std::cout << "Wireframe mode: " << wireframe_mode_ << std::endl;
 
     });
 
-    input.addKeyPressedCallback(GLFW_KEY_R, [this]() {
+    input.addKeyPressedCallback(Key::KEY_R, [this]() {
         std::cout << "Recompile all shaders..." << std::endl;
         compile_shaders();
     });
 
-    input.addMouseButtonPressedCallback(GLFW_MOUSE_BUTTON_RIGHT, [this]() {
+    input.addMouseButtonPressedCallback(MouseButton::MOUSE_BUTTON_RIGHT, [this]() {
         input.setCursorEnabled(false);
     });
-    input.addMouseButtonReleasedCallback(GLFW_MOUSE_BUTTON_RIGHT, [this]() {
+    input.addMouseButtonReleasedCallback(MouseButton::MOUSE_BUTTON_RIGHT, [this]() {
         input.setCursorEnabled(true);
     });
 
@@ -144,7 +144,7 @@ void ExampleGameLogic::update()
     const float dt = (float)engine.getDelta();
 
     // camera rotation
-    if (input.isMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
+    if (input.isMouseButtonDown(MouseButton::MOUSE_BUTTON_RIGHT))
     {
         std::cout << input.getMouseDelta().x << "  " <<  input.getMouseDelta().y << std::endl;
 
@@ -162,19 +162,19 @@ void ExampleGameLogic::update()
 
         glm::vec3 offset{};
 
-        if (input.isKeyDown(GLFW_KEY_D))
+        if (input.isKeyDown(Key::KEY_D))
             offset += Math::getRight(camera_->getTransform());
-        if (input.isKeyDown(GLFW_KEY_A))
+        if (input.isKeyDown(Key::KEY_A))
             offset -= Math::getRight(camera_->getTransform());
 
-        if (input.isKeyDown(GLFW_KEY_W))
+        if (input.isKeyDown(Key::KEY_W))
             offset += Math::getForward(camera_->getTransform());
-        if (input.isKeyDown(GLFW_KEY_S))
+        if (input.isKeyDown(Key::KEY_S))
             offset -= Math::getForward(camera_->getTransform());
 
-        if (input.isKeyDown(GLFW_KEY_SPACE))
+        if (input.isKeyDown(Key::KEY_SPACE))
             offset += Math::getUp(camera_->getTransform());
-        if (input.isKeyDown(GLFW_KEY_LEFT_SHIFT))
+        if (input.isKeyDown(Key::KEY_LEFT_SHIFT))
             offset -= Math::getUp(camera_->getTransform());
 
         offset *= speed * dt;
@@ -187,15 +187,15 @@ void ExampleGameLogic::update()
         constexpr float speed = glm::radians(45.f);
 
         int rot_dir_y = 0;
-        if (input.isKeyDown(GLFW_KEY_1))
+        if (input.isKeyDown(Key::KEY_1))
             rot_dir_y += 1;
-        if (input.isKeyDown(GLFW_KEY_2))
+        if (input.isKeyDown(Key::KEY_2))
             rot_dir_y -= 1;
 
         int rot_dir_x = 0;
-        if (input.isKeyDown(GLFW_KEY_3))
+        if (input.isKeyDown(Key::KEY_3))
             rot_dir_x += 1;
-        if (input.isKeyDown(GLFW_KEY_4))
+        if (input.isKeyDown(Key::KEY_4))
             rot_dir_x -= 1;
 
         model_mat_ = glm::rotate(model_mat_, (float)rot_dir_y * speed * dt, {0, 1, 0});

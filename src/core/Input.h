@@ -4,6 +4,8 @@
 #include <functional>
 #include <vector>
 
+#include "InputEnums.h"
+
 struct GLFWwindow;
 
 // TODO refactor this! it's very dirty now. use some event system instead
@@ -13,20 +15,20 @@ class Input final
     friend class Engine;
 
 public:
-    bool isKeyDown(int key);
-    bool isMouseButtonDown(int button);
+    bool isKeyDown(Key key);
+    bool isMouseButtonDown(MouseButton button);
 
     glm::dvec2 getMousePosition();
     glm::dvec2 getMouseDelta();
 
     void setCursorEnabled(bool enabled);
 
-    int addKeyPressedCallback(int key, const std::function<void()>& callback);
-    int addKeyReleasedCallback(int key, const std::function<void()>& callback);
+    int addKeyPressedCallback(Key key, const std::function<void()>& callback);
+    int addKeyReleasedCallback(Key key, const std::function<void()>& callback);
     void removeKeyCallback(int callback_id);
 
-    int addMouseButtonPressedCallback(int button, const std::function<void()>& callback);
-    int addMouseButtonReleasedCallback(int button, const std::function<void()>& callback);
+    int addMouseButtonPressedCallback(MouseButton button, const std::function<void()>& callback);
+    int addMouseButtonReleasedCallback(MouseButton button, const std::function<void()>& callback);
     void removeMouseButtonCallback(int callback_id);
 
     static Input& get();
@@ -56,7 +58,7 @@ private:
     struct KeyCallback
     {
         int callback_id;
-        int key;
+        Key key;
         int action; // pressed or released
         std::function<void()> callback;
     };
@@ -65,7 +67,7 @@ private:
     struct MouseButtonCallback
     {
         int callback_id;
-        int button;
+        MouseButton button;
         int action; // pressed or released
         std::function<void()> callback;
     };

@@ -6,7 +6,9 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/src/vendor
+        ${CMAKE_SOURCE_DIR}/src
 )
+
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
 add_executable(LearnOpenGL
@@ -58,7 +60,11 @@ add_executable(LearnOpenGL
         src/render/Texture.cpp
         src/core/Camera.cpp
         src/core/Camera.h
-        src/core/MathUtils.h)
+        src/core/MathUtils.h
+        src/core/events/Event.h
+        src/core/events/InputEvents.h
+        src/core/InputEnums.h
+        )
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
 
