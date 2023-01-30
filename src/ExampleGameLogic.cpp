@@ -25,12 +25,6 @@ void ExampleGameLogic::init()
         Engine::get().shutdownLater();
     });
 
-    input.addKeyPressedCallback(Key::KEY_F1, [this]() {
-        wireframe_mode_ = !wireframe_mode_;
-        std::cout << "Wireframe mode: " << wireframe_mode_ << std::endl;
-
-    });
-
     input.addKeyPressedCallback(Key::KEY_R, [this]() {
         std::cout << "Recompile all shaders..." << std::endl;
         compile_shaders();
