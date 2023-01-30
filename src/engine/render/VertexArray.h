@@ -10,6 +10,9 @@ public:
     VertexArray();
     ~VertexArray();
 
+    VertexArray(const VertexArray&) = delete;
+    VertexArray& operator=(const VertexArray&) = delete;
+
     void bind() const;
     void unbind() const;
 

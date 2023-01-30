@@ -18,6 +18,9 @@ public:
     Shader(const std::string& filename_vertex, const std::string& filename_fragment);
     ~Shader();
 
+    Shader(Shader&) = delete;
+    Shader& operator=(Shader&) = delete;
+
     void setShaders(const std::string& filename_vertex, const std::string& filename_fragment);
 
     void bind() const;

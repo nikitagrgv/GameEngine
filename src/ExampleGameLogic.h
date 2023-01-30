@@ -1,15 +1,15 @@
 #pragma once
 
-#include "engine/Render/Renderer.h"
-#include "engine/Render/Shader.h"
-#include "engine/Render/Texture.h"
-#include "engine/Render/VertexArray.h"
-#include "engine/Render/VertexBuffer.h"
 #include "engine/core/Camera.h"
 #include "engine/core/Engine.h"
 #include "engine/core/GameLogic.h"
 #include "engine/core/Input.h"
 #include "engine/render/IndexBuffer.h"
+#include "engine/render/Renderer.h"
+#include "engine/render/Shader.h"
+#include "engine/render/Texture.h"
+#include "engine/render/VertexArray.h"
+#include "engine/render/VertexBuffer.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -63,34 +63,27 @@ private:
     };
 
     const Vertex vertices_[12]{
-        // far plane
-        {  {0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // top right
-        { {0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // bottom right
-        {{-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // bottom left
-        { {-0.5f, 0.5f, 0.5f}, {0.8f, 0.1f, 0.8f}, {0.0f, 1.0f}}, // top left
-        // near plane
+  // far plane
+        {   {0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // top right
+        {  {0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // bottom right
+        { {-0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // bottom left
+        {  {-0.5f, 0.5f, 0.5f}, {0.8f, 0.1f, 0.8f}, {0.0f, 1.0f}}, // top left
+  // near plane
         {  {0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // top right
         { {0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // bottom right
         {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // bottom left
         { {-0.5f, 0.5f, -0.5f}, {0.8f, 0.1f, 0.8f}, {0.0f, 1.0f}}, // top left
-        // right plane
-        {  {0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // top right far
-        { {0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // bottom right far
+  // right plane
+        {   {0.5f, 0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}}, // top right far
+        {  {0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}}, // bottom right far
         { {0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}, // bottom right near
         {  {0.5f, 0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}}, // top right near
-
-
     };
 
-    const unsigned int indices_[18] = {
-        // far plane
-        0, 1, 3,
-        1, 2, 3,
+    const unsigned int indices_[18] = {// far plane
+        0, 1, 3, 1, 2, 3,
         // near plane
-        4, 5, 7,
-        5, 6, 7,
+        4, 5, 7, 5, 6, 7,
         // right plane
-        8, 9, 11,
-        9, 10, 11
-    };
+        8, 9, 11, 9, 10, 11};
 };
