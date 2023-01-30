@@ -2,6 +2,7 @@
 
 #include "GameLogic.h"
 #include "Input.h"
+#include "GLFWWatcher.h"
 
 #include <algorithm>
 
@@ -18,14 +19,22 @@ void Engine::init(const char* name, int width, int height)
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
     update_viewport_size(width, height);
-    glfwSetFramebufferSizeCallback(glfw_window_,
-        [](GLFWwindow* window, int width, int height) {
-            Engine::get().update_viewport_size(width, height);
-        });
-
     glEnable(GL_DEPTH_TEST);
 
     Input::get().init();
+
+    GLFWWatcher::get().init(glfw_window_);
+
+    GLFWWatcher::get().addCallback(
+        [this](EventPtr event_ptr) { onEvent(std::move(event_ptr)); },
+        EVENT_CATEGORY_ALL
+    );
+
+    GLFWWatcher::get().addCallback(
+        [](EventPtr event_ptr) { Input::get().onEvent(std::move(event_ptr)); },
+        EVENT_CATEGORY_INPUT
+    );
+
 }
 
 void Engine::run()
@@ -140,6 +149,13 @@ void Engine::shutdown()
     for (auto* game : game_logics_)
         game->shutdown();
 
+    Input::get().shutdown();
+
     glfwTerminate();
+}
+
+void Engine::onEvent(EventPtr event)
+{
+
 }
 

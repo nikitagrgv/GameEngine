@@ -1,5 +1,7 @@
 #pragma once
 
+#include "events/Event.h"
+
 // clang-format off
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -7,6 +9,7 @@
 
 #include <set>
 #include <vector>
+#include <memory>
 
 class GameLogic;
 class Input;
@@ -33,6 +36,8 @@ public:
     double getHeight();
 
     void* getWindow();
+
+    void onEvent(EventPtr event);
 
 private:
     Engine() = default;

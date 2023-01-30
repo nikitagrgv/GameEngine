@@ -25,7 +25,7 @@ public:
         : KeyEvent(key)
     {}
 
-    DECLARE_EVENT_METHODS(KeyPressed);
+    DECLARE_EVENT_METHODS(KeyPressed, EVENT_CATEGORY_INPUT);
 };
 
 class KeyReleasedEvent final : public KeyEvent
@@ -35,7 +35,7 @@ public:
         : KeyEvent(key)
     {}
 
-    DECLARE_EVENT_METHODS(KeyReleased);
+    DECLARE_EVENT_METHODS(KeyReleased, EVENT_CATEGORY_INPUT);
 };
 
 // ------------------------ MOUSE BUTTON EVENTS  ---------------------------------------
@@ -61,7 +61,7 @@ public:
         : MouseButtonEvent(mouse_button)
     {}
 
-    DECLARE_EVENT_METHODS(MouseButtonPressed);
+    DECLARE_EVENT_METHODS(MouseButtonPressed, EVENT_CATEGORY_INPUT);
 };
 
 class MouseButtonReleasedEvent final : public MouseButtonEvent
@@ -71,5 +71,5 @@ public:
         : MouseButtonEvent(mouse_button)
     {}
 
-    DECLARE_EVENT_METHODS(MouseButtonReleased);
+    DECLARE_EVENT_METHODS(MouseButtonReleased, EVENT_CATEGORY_INPUT);
 };

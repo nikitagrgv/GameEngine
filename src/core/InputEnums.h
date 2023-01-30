@@ -1,5 +1,13 @@
 #pragma once
 
+enum class KeyState
+{
+    DOWN,
+    UP,
+    PRESSED, // pressed and therefore down
+    RELEASED // released and therefore up
+};
+
 enum class Key
 {
     KEY_SPACE,
@@ -139,3 +147,7 @@ enum class MouseButton
     MOUSE_BUTTON_8,
 };
 
+Key getKeyFromGLFW(int glfw_key);
+int getGLFWKey(Key key);
+MouseButton getMouseButtonFromGLFW(int glfw_mouse_button);
+int getGLFWMouseButton(MouseButton mouse_button);

@@ -2,25 +2,45 @@
 
 #include "core/InputEnums.h"
 
+#include <memory>
+
 enum class EventType
 {
     None = 0,
+
+    // INPUT
     KeyPressed,
     KeyReleased,
     MouseButtonPressed,
     MouseButtonReleased,
     MouseScrolled,
-    MouseMoved
+    MouseMoved,
+
+    // WINDOW
+    FramebufferSizeChanged,
 };
 
-#define DECLARE_EVENT_METHODS(type)                                                                \
-    static EventType getStaticType()                                                               \
+enum EventCategory
+{
+    EVENT_CATEGORY_NONE = 0,
+    EVENT_CATEGORY_INPUT = 1 << 1,
+    EVENT_CATEGORY_WINDOW = 1 << 2,
+
+    EVENT_CATEGORY_ALL = EVENT_CATEGORY_INPUT | EVENT_CATEGORY_WINDOW,
+};
+
+#define DECLARE_EVENT_METHODS(type, categories)                                                    \
+    static EventType getEventTypeStatic()                                                          \
     {                                                                                              \
         return EventType::type;                                                                    \
     }                                                                                              \
     virtual EventType getEventType() const override                                                \
     {                                                                                              \
-        return getStaticType();                                                                    \
+        return getEventTypeStatic();                                                               \
+    }                                                                                              \
+    virtual int getEventCategories() const override                                                \
+    {                                                                                              \
+        return categories;                                                                         \
     }
 
 class Event
@@ -29,5 +49,18 @@ public:
     Event() = default;
     virtual ~Event() = default;
 
+    static bool isInCategory(EventCategory category, int categories)
+    {
+        return category & categories;
+    }
+
+    bool isInCategory(EventCategory category) const
+    {
+        return isInCategory(category, getEventCategories());
+    }
+
     virtual EventType getEventType() const = 0;
+    virtual int getEventCategories() const = 0;
 };
+
+using EventPtr = std::unique_ptr<Event>;

@@ -2,11 +2,11 @@
 
 #include "IdContainer.h"
 #include "InputEnums.h"
+#include "events/Event.h"
 
 #include "glm/vec2.hpp"
 #include <functional>
 #include <vector>
-#include <unordered_map>
 
 struct GLFWwindow;
 
@@ -17,26 +17,6 @@ class Input final
     friend class Engine;
 
 public:
-    Key getKeyFromGLFW(int glfw_key)
-    {
-        return static_cast<Key>(lookup_key_from_glfw_[glfw_key]);
-    }
-
-    int getGLFWKey(Key key)
-    {
-        return lookup_glfw_from_key_[static_cast<int>(key)];
-    }
-
-    MouseButton getMouseButtonFromGLFW(int glfw_mouse_button)
-    {
-        return static_cast<MouseButton>(lookup_mouse_button_from_glfw_[glfw_mouse_button]);
-    }
-
-    int getGLFWMouseButton(MouseButton mouse_button)
-    {
-        return lookup_glfw_from_mouse_button_[static_cast<int>(mouse_button)];
-    }
-
     bool isKeyDown(Key key);
     bool isMouseButtonDown(MouseButton button);
 
@@ -55,25 +35,22 @@ public:
 
     static Input& get();
 
+    void onEvent(EventPtr event);
+
 private:
-    Input();
+    Input() = default;
     ~Input() = default;
 
     void init();
     void update();
+    void shutdown();
 
-    void init_lookup_tables();
-
-    void glfw_key_callback(int key, int scancode, int action, int mods);
-    void glfw_mouse_button_callback(int button, int action, int mods);
+    void on_key_pressed(Key key);
+    void on_key_released(Key key);
+    void on_mouse_pressed(MouseButton button);
+    void on_mouse_released(MouseButton button);
 
 private:
-    std::unordered_map<int, int> lookup_key_from_glfw_;
-    std::unordered_map<int, int> lookup_glfw_from_key_;
-
-    std::unordered_map<int, int> lookup_mouse_button_from_glfw_;
-    std::unordered_map<int, int> lookup_glfw_from_mouse_button_;
-
     GLFWwindow* glfw_window_{nullptr};
 
     glm::dvec2 mouse_position_{};
@@ -82,7 +59,7 @@ private:
     struct KeyCallback
     {
         Key key;
-        int action; // pressed or released
+        KeyState action; // pressed or released
         std::function<void()> callback;
     };
     IdContainer<KeyCallback> key_callbacks_;
@@ -90,7 +67,7 @@ private:
     struct MouseButtonCallback
     {
         MouseButton button;
-        int action; // pressed or released
+        KeyState action; // pressed or released
         std::function<void()> callback;
     };
     IdContainer<MouseButtonCallback> mouse_button_callbacks_;

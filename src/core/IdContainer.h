@@ -36,6 +36,11 @@ public:
         }
     }
 
+    const T& operator[](int index) const
+    {
+        return getObject(index);
+    }
+
     const T& getObject(int index) const
     {
         return objects_[index].obj;
