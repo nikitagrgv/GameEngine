@@ -20,24 +20,6 @@ void ExampleGameLogic::init()
 
     imgui_init();
 
-    // CONTROLS CALLBACKS
-    input.addKeyPressedCallback(Key::KEY_ESCAPE, []() {
-        Engine::get().shutdownLater();
-    });
-
-    input.addKeyPressedCallback(Key::KEY_R, [this]() {
-        std::cout << "Recompile all shaders..." << std::endl;
-        compile_shaders();
-    });
-
-    input.addMouseButtonPressedCallback(MouseButton::MOUSE_BUTTON_RIGHT, [this]() {
-        input.setCursorEnabled(false);
-    });
-    input.addMouseButtonReleasedCallback(MouseButton::MOUSE_BUTTON_RIGHT, [this]() {
-        input.setCursorEnabled(true);
-    });
-
-
     // ------------------------- SHADERS ------------------
     compile_shaders();
 
@@ -137,6 +119,22 @@ void ExampleGameLogic::imgui_draw()
 void ExampleGameLogic::update()
 {
     const float dt = (float)engine.getDelta();
+
+    // input
+    if (input.isKeyPressed(Key::KEY_ESCAPE))
+        Engine::get().shutdownLater();
+
+    if (input.isKeyPressed(Key::KEY_R))
+    {
+        std::cout << "Recompile all shaders..." << std::endl;
+        compile_shaders();
+    }
+
+    if (input.isMouseButtonPressed(MouseButton::MOUSE_BUTTON_RIGHT))
+        input.setCursorEnabled(false);
+
+    if (input.isMouseButtonReleased(MouseButton::MOUSE_BUTTON_RIGHT))
+        input.setCursorEnabled(true);
 
     // camera rotation
     if (input.isMouseButtonDown(MouseButton::MOUSE_BUTTON_RIGHT))

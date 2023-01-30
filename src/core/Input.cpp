@@ -6,12 +6,34 @@
 
 bool Input::isKeyDown(Key key)
 {
-    return glfwGetKey(glfw_window_, getGLFWKey(key));
+    const auto& state = key_states_[key];
+    return (state == KeyState::DOWN || state == KeyState::PRESSED);
 }
 
 bool Input::isMouseButtonDown(MouseButton button)
 {
-    return glfwGetMouseButton(glfw_window_, getGLFWMouseButton(button));
+    const auto& state = mouse_button_states_[button];
+    return (state == KeyState::DOWN || state == KeyState::PRESSED);
+}
+
+bool Input::isKeyPressed(Key key)
+{
+    return key_states_[key] == KeyState::PRESSED;
+}
+
+bool Input::isMouseButtonPressed(MouseButton button)
+{
+    return mouse_button_states_[button] == KeyState::PRESSED;
+}
+
+bool Input::isKeyReleased(Key key)
+{
+    return key_states_[key] == KeyState::RELEASED;
+}
+
+bool Input::isMouseButtonReleased(MouseButton button)
+{
+    return mouse_button_states_[button] == KeyState::RELEASED;
 }
 
 glm::dvec2 Input::getMousePosition()
@@ -82,6 +104,20 @@ void Input::removeMouseButtonCallback(int callback_id)
 void Input::init()
 {
     glfw_window_ = Engine::get().glfw_window_;
+
+    clear_states();
+}
+
+void Input::clear_states()
+{
+    for (int i = 0; i < (int)Key::KEYS_COUNT; i++)
+    {
+        key_states_[(Key)i] = KeyState::UP;
+    }
+    for (int i = 0; i < (int)MouseButton::MOUSE_BUTTONS_COUNT; i++)
+    {
+        mouse_button_states_[(MouseButton)i] = KeyState::UP;
+    }
 }
 
 void Input::update()
@@ -89,6 +125,34 @@ void Input::update()
     const glm::dvec2 new_pos = getMousePosition();
     mouse_delta_ = new_pos - mouse_position_;
     mouse_position_ = new_pos;
+
+    update_states();
+}
+
+void Input::update_states()
+{
+    for (auto& state : key_states_)
+    {
+        if (state.second == KeyState::PRESSED)
+        {
+            state.second = KeyState::DOWN;
+        }
+        else if (state.second == KeyState::RELEASED)
+        {
+            state.second = KeyState::UP;
+        }
+    }
+    for (auto& state : mouse_button_states_)
+    {
+        if (state.second == KeyState::PRESSED)
+        {
+            state.second = KeyState::DOWN;
+        }
+        else if (state.second == KeyState::RELEASED)
+        {
+            state.second = KeyState::UP;
+        }
+    }
 }
 
 void Input::shutdown()
@@ -105,6 +169,8 @@ Input& Input::get()
 
 void Input::on_key_pressed(Key key)
 {
+    key_states_[key] = KeyState::PRESSED;
+
     for (int i = 0; i < key_callbacks_.getNumObject(); i++)
     {
         auto& callback = key_callbacks_.getObject(i);
@@ -116,6 +182,8 @@ void Input::on_key_pressed(Key key)
 
 void Input::on_key_released(Key key)
 {
+    key_states_[key] = KeyState::RELEASED;
+
     for (int i = 0; i < key_callbacks_.getNumObject(); i++)
     {
         auto& callback = key_callbacks_.getObject(i);
@@ -127,6 +195,8 @@ void Input::on_key_released(Key key)
 
 void Input::on_mouse_pressed(MouseButton button)
 {
+    mouse_button_states_[button] = KeyState::PRESSED;
+
     for (int i = 0; i < mouse_button_callbacks_.getNumObject(); i++)
     {
         auto& callback = mouse_button_callbacks_.getObject(i);
@@ -138,6 +208,8 @@ void Input::on_mouse_pressed(MouseButton button)
 
 void Input::on_mouse_released(MouseButton button)
 {
+    mouse_button_states_[button] = KeyState::RELEASED;
+
     for (int i = 0; i < mouse_button_callbacks_.getNumObject(); i++)
     {
         auto& callback = mouse_button_callbacks_.getObject(i);

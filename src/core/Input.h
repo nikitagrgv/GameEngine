@@ -7,6 +7,7 @@
 #include "glm/vec2.hpp"
 #include <functional>
 #include <vector>
+#include <unordered_map>
 
 struct GLFWwindow;
 
@@ -19,6 +20,12 @@ class Input final
 public:
     bool isKeyDown(Key key);
     bool isMouseButtonDown(MouseButton button);
+
+    bool isKeyPressed(Key key);
+    bool isMouseButtonPressed(MouseButton button);
+
+    bool isKeyReleased(Key key);
+    bool isMouseButtonReleased(MouseButton button);
 
     glm::dvec2 getMousePosition();
     glm::dvec2 getMouseDelta();
@@ -53,6 +60,9 @@ private:
 private:
     GLFWwindow* glfw_window_{nullptr};
 
+    std::unordered_map<Key, KeyState> key_states_;
+    std::unordered_map<MouseButton, KeyState> mouse_button_states_;
+
     glm::dvec2 mouse_position_{};
     glm::dvec2 mouse_delta_{};
 
@@ -71,4 +81,6 @@ private:
         std::function<void()> callback;
     };
     IdContainer<MouseButtonCallback> mouse_button_callbacks_;
+    void clear_states();
+    void update_states();
 };

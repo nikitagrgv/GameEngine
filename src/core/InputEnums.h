@@ -2,8 +2,8 @@
 
 enum class KeyState
 {
-    DOWN,
     UP,
+    DOWN,
     PRESSED, // pressed and therefore down
     RELEASED // released and therefore up
 };
@@ -130,13 +130,12 @@ enum class Key
     KEY_RIGHT_ALT,
     KEY_RIGHT_SUPER,
     KEY_MENU,
+
+    KEYS_COUNT
 };
 
 enum class MouseButton
 {
-    MOUSE_BUTTON_LEFT,
-    MOUSE_BUTTON_RIGHT,
-    MOUSE_BUTTON_MIDDLE,
     MOUSE_BUTTON_1,
     MOUSE_BUTTON_2,
     MOUSE_BUTTON_3,
@@ -145,6 +144,12 @@ enum class MouseButton
     MOUSE_BUTTON_6,
     MOUSE_BUTTON_7,
     MOUSE_BUTTON_8,
+
+    MOUSE_BUTTON_LEFT = MOUSE_BUTTON_1,
+    MOUSE_BUTTON_RIGHT = MOUSE_BUTTON_2,
+    MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3,
+
+    MOUSE_BUTTONS_COUNT
 };
 
 Key getKeyFromGLFW(int glfw_key);
