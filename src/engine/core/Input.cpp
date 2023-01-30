@@ -1,8 +1,7 @@
 #include "Input.h"
 
 #include "Engine.h"
-
-#include "events/InputEvents.h"
+#include "engine/core/events/InputEvents.h"
 
 bool Input::isKeyDown(Key key)
 {

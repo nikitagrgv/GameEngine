@@ -2,8 +2,8 @@
 
 #include "GLFW/glfw3.h"
 #include "InputEnums.h"
-#include "events/InputEvents.h"
-#include "events/WindowEvents.h"
+#include "engine/core/events/InputEvents.h"
+#include "engine/core/events/WindowEvents.h"
 
 GLFWWatcher& GLFWWatcher::get()
 {

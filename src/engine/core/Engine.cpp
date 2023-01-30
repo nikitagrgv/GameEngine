@@ -3,8 +3,8 @@
 #include "GLFWWatcher.h"
 #include "GameLogic.h"
 #include "Input.h"
-#include "events/InputEvents.h"
-#include "events/WindowEvents.h"
+#include "engine/core/events/InputEvents.h"
+#include "engine/core/events/WindowEvents.h"
 
 #include <algorithm>
 

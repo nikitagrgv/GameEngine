@@ -1,6 +1,6 @@
 #pragma once
 
-#include "events/Event.h"
+#include "engine/core/events/Event.h"
 
 // clang-format off
 #include "glad/glad.h"

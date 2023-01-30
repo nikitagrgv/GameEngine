@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Render/Renderer.h"
-#include "Render/Shader.h"
-#include "Render/Texture.h"
-#include "Render/VertexArray.h"
-#include "Render/VertexBuffer.h"
-#include "core/Camera.h"
-#include "core/Engine.h"
-#include "core/GameLogic.h"
-#include "core/Input.h"
-#include "render/IndexBuffer.h"
+#include "engine/Render/Renderer.h"
+#include "engine/Render/Shader.h"
+#include "engine/Render/Texture.h"
+#include "engine/Render/VertexArray.h"
+#include "engine/Render/VertexBuffer.h"
+#include "engine/core/Camera.h"
+#include "engine/core/Engine.h"
+#include "engine/core/GameLogic.h"
+#include "engine/core/Input.h"
+#include "engine/render/IndexBuffer.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

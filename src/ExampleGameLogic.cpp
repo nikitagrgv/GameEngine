@@ -1,14 +1,14 @@
 #include "ExampleGameLogic.h"
 
-#include "core/Engine.h"
-#include "core/FileManager.h"
-#include "core/Input.h"
-#include "core/MathUtils.h"
-#include "core/events/InputEvents.h"
+#include "engine/core/Engine.h"
+#include "engine/core/FileManager.h"
+#include "engine/core/Input.h"
+#include "engine/core/MathUtils.h"
+#include "engine/core/events/InputEvents.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include "render/OpenGLUtils.h"
+#include "engine/render/OpenGLUtils.h"
 
 #include <GLFW/glfw3.h>
 

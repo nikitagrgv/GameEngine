@@ -34,41 +34,41 @@ add_executable(LearnOpenGL
 
         src/main.cpp
         src/vendor/glad/glad.c
-        src/core/Engine.cpp
-        src/core/Engine.h
-        src/core/GameLogic.h
+        src/engine/core/Engine.cpp
+        src/engine/core/Engine.h
+        src/engine/core/GameLogic.h
         src/ExampleGameLogic.cpp
         src/ExampleGameLogic.h
-        src/core/Input.cpp
-        src/core/Input.h
-        src/core/FileManager.cpp
-        src/core/FileManager.h
-        src/render/VertexBuffer.cpp
-        src/render/VertexBuffer.h
-        src/render/IndexBuffer.cpp
-        src/render/IndexBuffer.h
-        src/render/VertexArray.cpp
-        src/render/VertexArray.h
-        src/render/VertexBufferLayout.cpp
-        src/render/VertexBufferLayout.h
-        src/render/Shader.cpp
-        src/render/Shader.h
-        src/render/Renderer.h
-        src/render/Renderer.cpp
-        src/render/OpenGLUtils.h
-        src/render/Texture.h
-        src/render/Texture.cpp
-        src/core/Camera.cpp
-        src/core/Camera.h
-        src/core/MathUtils.h
-        src/core/events/Event.h
-        src/core/events/InputEvents.h
-        src/core/InputEnums.h
-        src/core/GLFWWatcher.cpp
-        src/core/GLFWWatcher.h
-        src/core/IdContainer.h
-        src/core/events/WindowEvents.h
-        src/core/InputEnums.cpp)
+        src/engine/core/Input.cpp
+        src/engine/core/Input.h
+        src/engine/core/FileManager.cpp
+        src/engine/core/FileManager.h
+        src/engine/render/VertexBuffer.cpp
+        src/engine/render/VertexBuffer.h
+        src/engine/render/IndexBuffer.cpp
+        src/engine/render/IndexBuffer.h
+        src/engine/render/VertexArray.cpp
+        src/engine/render/VertexArray.h
+        src/engine/render/VertexBufferLayout.cpp
+        src/engine/render/VertexBufferLayout.h
+        src/engine/render/Shader.cpp
+        src/engine/render/Shader.h
+        src/engine/render/Renderer.h
+        src/engine/render/Renderer.cpp
+        src/engine/render/OpenGLUtils.h
+        src/engine/render/Texture.h
+        src/engine/render/Texture.cpp
+        src/engine/core/Camera.cpp
+        src/engine/core/Camera.h
+        src/engine/core/MathUtils.h
+        src/engine/core/events/Event.h
+        src/engine/core/events/InputEvents.h
+        src/engine/core/InputEnums.h
+        src/engine/core/GLFWWatcher.cpp
+        src/engine/core/GLFWWatcher.h
+        src/engine/core/IdContainer.h
+        src/engine/core/events/WindowEvents.h
+        src/engine/core/InputEnums.cpp)
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
 
