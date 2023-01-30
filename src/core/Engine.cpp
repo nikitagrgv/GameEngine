@@ -1,8 +1,10 @@
 #include "Engine.h"
 
+#include "GLFWWatcher.h"
 #include "GameLogic.h"
 #include "Input.h"
-#include "GLFWWatcher.h"
+#include "events/InputEvents.h"
+#include "events/WindowEvents.h"
 
 #include <algorithm>
 
@@ -80,8 +82,7 @@ void Engine::addGameLogic(GameLogic* game_logic)
 
 void Engine::removeGameLogic(GameLogic* game_logic)
 {
-    const auto iterator = std::find(game_logics_.begin(), game_logics_.end(),
-        game_logic);
+    const auto iterator = std::find(game_logics_.begin(), game_logics_.end(), game_logic);
 
     if (iterator != game_logics_.end())
     {
@@ -156,6 +157,6 @@ void Engine::shutdown()
 
 void Engine::onEvent(EventPtr event)
 {
-
+    if (auto* e = dynamic_cast<FramebufferSizeChangedEvent*>(event.get()))
+        update_viewport_size(e->getWidth(), e->getHeight());
 }
-
