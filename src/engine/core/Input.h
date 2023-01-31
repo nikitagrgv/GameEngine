@@ -3,6 +3,7 @@
 #include "IdContainer.h"
 #include "InputEnums.h"
 #include "engine/core/events/Event.h"
+#include "engine/core/events/InputEvents.h"
 
 #include "glm/vec2.hpp"
 #include <functional>
@@ -19,12 +20,12 @@ class Input final
 
 public:
     bool isKeyDown(Key key);
-    bool isMouseButtonDown(MouseButton button);
-
     bool isKeyPressed(Key key);
-    bool isMouseButtonPressed(MouseButton button);
-
     bool isKeyReleased(Key key);
+    bool isKeyRepeated(Key key);
+
+    bool isMouseButtonDown(MouseButton button);
+    bool isMouseButtonPressed(MouseButton button);
     bool isMouseButtonReleased(MouseButton button);
 
     glm::dvec2 getMousePosition();
@@ -52,10 +53,8 @@ private:
     void update();
     void shutdown();
 
-    void on_key_pressed(Key key);
-    void on_key_released(Key key);
-    void on_mouse_pressed(MouseButton button);
-    void on_mouse_released(MouseButton button);
+    void handle_event(const KeyPressEvent& event);
+    void handle_event(const MousePressEvent& event);
 
 private:
     GLFWwindow* glfw_window_{nullptr};

@@ -4,8 +4,9 @@ enum class KeyState
 {
     UP,
     DOWN,
-    PRESSED, // pressed and therefore down
-    RELEASED // released and therefore up
+    PRESSED, // and therefore down
+    RELEASED, // and therefore up
+    REPEATED, // and therefore down
 };
 
 enum class Key

@@ -9,10 +9,8 @@ enum class EventType
     None = 0,
 
     // INPUT
-    KeyPressed,
-    KeyReleased,
-    MouseButtonPressed,
-    MouseButtonReleased,
+    KeyPress,
+    MousePress,
     MouseScrolled,
     MouseMoved,
 

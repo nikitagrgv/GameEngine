@@ -6,13 +6,13 @@
 bool Input::isKeyDown(Key key)
 {
     const auto& state = key_states_[key];
-    return (state == KeyState::DOWN || state == KeyState::PRESSED);
+    return state == KeyState::DOWN || state == KeyState::PRESSED || state == KeyState::REPEATED;
 }
 
 bool Input::isMouseButtonDown(MouseButton button)
 {
     const auto& state = mouse_button_states_[button];
-    return (state == KeyState::DOWN || state == KeyState::PRESSED);
+    return state == KeyState::DOWN || state == KeyState::PRESSED; // mouse button cannot be repeated
 }
 
 bool Input::isKeyPressed(Key key)
@@ -20,14 +20,19 @@ bool Input::isKeyPressed(Key key)
     return key_states_[key] == KeyState::PRESSED;
 }
 
-bool Input::isMouseButtonPressed(MouseButton button)
-{
-    return mouse_button_states_[button] == KeyState::PRESSED;
-}
-
 bool Input::isKeyReleased(Key key)
 {
     return key_states_[key] == KeyState::RELEASED;
+}
+
+bool Input::isKeyRepeated(Key key)
+{
+    return key_states_[key] == KeyState::REPEATED;
+}
+
+bool Input::isMouseButtonPressed(MouseButton button)
+{
+    return mouse_button_states_[button] == KeyState::PRESSED;
 }
 
 bool Input::isMouseButtonReleased(MouseButton button)
@@ -132,7 +137,7 @@ void Input::update_states()
 {
     for (auto& state : key_states_)
     {
-        if (state.second == KeyState::PRESSED)
+        if (state.second == KeyState::PRESSED || state.second == KeyState::REPEATED)
         {
             state.second = KeyState::DOWN;
         }
@@ -141,6 +146,7 @@ void Input::update_states()
             state.second = KeyState::UP;
         }
     }
+
     for (auto& state : mouse_button_states_)
     {
         if (state.second == KeyState::PRESSED)
@@ -166,81 +172,44 @@ Input& Input::get()
     return instance;
 }
 
-void Input::on_key_pressed(Key key)
+void Input::handle_event(const KeyPressEvent& event)
 {
-    key_states_[key] = KeyState::PRESSED;
+    const auto key = event.getKey();
+    const auto state = event.getState();
 
-    for (int i = 0; i < key_callbacks_.getNumObject(); i++)
+    key_states_[key] = state;
+
+    for (int i = 0; i < key_callbacks_.count(); i++)
     {
-        auto& callback = key_callbacks_.getObject(i);
+        auto& callback = key_callbacks_[i];
 
-        if (callback.key == key && callback.action == KeyState::PRESSED)
+        if (callback.key == key && callback.action == state)
             callback.callback();
     }
 }
 
-void Input::on_key_released(Key key)
+void Input::handle_event(const MousePressEvent& event)
 {
-    key_states_[key] = KeyState::RELEASED;
+    const auto button = event.getButton();
+    const auto state = event.getState();
 
-    for (int i = 0; i < key_callbacks_.getNumObject(); i++)
+    mouse_button_states_[button] = state;
+
+    for (int i = 0; i < mouse_button_callbacks_.count(); i++)
     {
-        auto& callback = key_callbacks_.getObject(i);
+        auto& callback = mouse_button_callbacks_[i];
 
-        if (callback.key == key && callback.action == KeyState::RELEASED)
-            callback.callback();
-    }
-}
-
-void Input::on_mouse_pressed(MouseButton button)
-{
-    mouse_button_states_[button] = KeyState::PRESSED;
-
-    for (int i = 0; i < mouse_button_callbacks_.getNumObject(); i++)
-    {
-        auto& callback = mouse_button_callbacks_.getObject(i);
-
-        if (callback.button == button && callback.action == KeyState::PRESSED)
-            callback.callback();
-    }
-}
-
-void Input::on_mouse_released(MouseButton button)
-{
-    mouse_button_states_[button] = KeyState::RELEASED;
-
-    for (int i = 0; i < mouse_button_callbacks_.getNumObject(); i++)
-    {
-        auto& callback = mouse_button_callbacks_.getObject(i);
-
-        if (callback.button == button && callback.action == KeyState::RELEASED)
+        if (callback.button == button && callback.action == state)
             callback.callback();
     }
 }
 
 void Input::onEvent(EventPtr event)
 {
-    if (auto* e = dynamic_cast<KeyPressedEvent*>(event.get()))
+    switch (event->getEventType())
     {
-        on_key_pressed(e->getKey());
-        return;
-    }
-
-    if (auto* e = dynamic_cast<KeyReleasedEvent*>(event.get()))
-    {
-        on_key_released(e->getKey());
-        return;
-    }
-
-    if (auto* e = dynamic_cast<MouseButtonPressedEvent*>(event.get()))
-    {
-        on_mouse_pressed(e->getMouseButton());
-        return;
-    }
-
-    if (auto* e = dynamic_cast<MouseButtonReleasedEvent*>(event.get()))
-    {
-        on_mouse_released(e->getMouseButton());
-        return;
+    case EventType::KeyPress: handle_event(static_cast<KeyPressEvent&>(*event));
+    case EventType::MousePress: handle_event(static_cast<MousePressEvent&>(*event));
+    default: break;
     }
 }

@@ -36,26 +36,30 @@ public:
         }
     }
 
+    const T& get(int index) const
+    {
+        return objects_[index].obj;
+    }
+
+    T& get(int index)
+    {
+        return objects_[index].obj;
+    }
+
     const T& operator[](int index) const
     {
-        return getObject(index);
+        return get(index);
     }
 
-    const T& getObject(int index) const
+    T& operator[](int index)
     {
-        return objects_[index].obj;
+        return get(index);
     }
 
-    T& getObject(int index)
-    {
-        return objects_[index].obj;
-    }
-
-    int getNumObject() const
+    int count() const
     {
         return objects_.size();
     }
-
 
 private:
     int generate_id() const

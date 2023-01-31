@@ -28,8 +28,8 @@ void ExampleGameLogic::init()
     array_buffer_->bind();
     GL_CHECK_ERROR();
 
-    index_buffer_ = std::make_unique<IndexBuffer>(indices_, sizeof(indices_) / sizeof(indices_[0]));
-    vertex_buffer_ = std::make_unique<VertexBuffer>(vertices_, sizeof(vertices_));
+    index_buffer_ = std::make_unique<IndexBuffer>(indices_, (int)(sizeof(indices_) / sizeof(indices_[0])));
+    vertex_buffer_ = std::make_unique<VertexBuffer>(vertices_, (int)(sizeof(vertices_)));
     VertexBufferLayout layout;
     layout.push<float>(3); // position
     layout.push<float>(3); // color
@@ -139,8 +139,6 @@ void ExampleGameLogic::update()
     // camera rotation
     if (input.isMouseButtonDown(MouseButton::MOUSE_BUTTON_RIGHT))
     {
-        std::cout << input.getMouseDelta().x << "  " <<  input.getMouseDelta().y << std::endl;
-
         constexpr float speed = glm::radians(0.1f);
 
         const auto mouse_delta = input.getMouseDelta();

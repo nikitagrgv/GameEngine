@@ -44,7 +44,7 @@ void GLFWWatcher::removeCallback(int callback)
 
 void GLFWWatcher::glfw_framebuffer_size_callback(int width, int height)
 {
-    for (int i = 0; i < callbacks_.getNumObject(); i++)
+    for (int i = 0; i < callbacks_.count(); i++)
     {
         if (!Event::isInCategory(EVENT_CATEGORY_WINDOW, callbacks_[i].categories))
             continue;
@@ -57,19 +57,15 @@ void GLFWWatcher::glfw_key_callback(int glfw_key, int scancode, int action, int 
 {
     const Key key = getKeyFromGLFW(glfw_key);
 
-    for (int i = 0; i < callbacks_.getNumObject(); i++)
+    for (int i = 0; i < callbacks_.count(); i++)
     {
         if (!Event::isInCategory(EVENT_CATEGORY_INPUT, callbacks_[i].categories))
             continue;
 
-        if (action == GLFW_PRESS)
-        {
-            callbacks_[i].callback(std::make_unique<KeyPressedEvent>(key));
-        }
-        else if (action == GLFW_RELEASE)
-        {
-            callbacks_[i].callback(std::make_unique<KeyReleasedEvent>(key));
-        }
+        callbacks_[i].callback(std::make_unique<KeyPressEvent>(key,
+            action == GLFW_PRESS         ? KeyState::PRESSED
+                : action == GLFW_RELEASE ? KeyState::RELEASED
+                                         : KeyState::REPEATED));
     }
 }
 
@@ -77,19 +73,14 @@ void GLFWWatcher::glfw_mouse_button_callback(int glfw_button, int action, int mo
 {
     const MouseButton button = getMouseButtonFromGLFW(glfw_button);
 
-    for (int i = 0; i < callbacks_.getNumObject(); i++)
+    for (int i = 0; i < callbacks_.count(); i++)
     {
         if (!Event::isInCategory(EVENT_CATEGORY_INPUT, callbacks_[i].categories))
             continue;
 
-        if (action == GLFW_PRESS)
-        {
-            callbacks_[i].callback(std::make_unique<MouseButtonPressedEvent>(button));
-        }
-        else if (action == GLFW_RELEASE)
-        {
-            callbacks_[i].callback(std::make_unique<MouseButtonReleasedEvent>(button));
-        }
+        callbacks_[i].callback(std::make_unique<MousePressEvent>(
+            button,
+            action == GLFW_PRESS ? KeyState::PRESSED : KeyState::RELEASED));
     }
 }
 

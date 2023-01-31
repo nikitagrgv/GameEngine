@@ -17,11 +17,10 @@ struct Vertex
 class Mesh
 {
 public:
-    VertexArray& getVertexArray() const;
-    IndexBuffer& getIndexBuffer() const;
+    const VertexArray& getVertexArray() const { return vertex_array_; }
+    const IndexBuffer& getIndexBuffer() const { return index_buffer_; }
 
 private:
     VertexArray vertex_array_;
     IndexBuffer index_buffer_;
-
 };
