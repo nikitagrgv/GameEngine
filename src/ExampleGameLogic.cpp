@@ -9,6 +9,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "engine/render/OpenGLUtils.h"
+#include "engine/mesh/ObjMeshLoader.h"
 
 #include <GLFW/glfw3.h>
 
@@ -28,12 +29,17 @@ void ExampleGameLogic::init()
     array_buffer_->bind();
     GL_CHECK_ERROR();
 
-    index_buffer_ = std::make_unique<IndexBuffer>(indices_, (int)(sizeof(indices_) / sizeof(indices_[0])));
-    vertex_buffer_ = std::make_unique<VertexBuffer>(vertices_, (int)(sizeof(vertices_)));
+    //    index_buffer_ = std::make_unique<IndexBuffer>(indices_, (int)(sizeof(indices_) / sizeof(indices_[0])));
+    //    vertex_buffer_ = std::make_unique<VertexBuffer>(vertices_, (int)(sizeof(vertices_)));
+
+    ObjMeshLoader loader("../data/models/cube.obj");
+    assert(loader.isLoaded());
+    index_buffer_ = std::make_unique<IndexBuffer>(&loader.getIndices()[0], loader.getIndices().size());
+    vertex_buffer_ = std::make_unique<VertexBuffer>(&loader.getVertices()[0], loader.getVertices().size() * sizeof(loader.getVertices()[0]));
     VertexBufferLayout layout;
     layout.push<float>(3); // position
-    layout.push<float>(3); // color
     layout.push<float>(2); // texture coordinates
+    layout.push<float>(3); // normals
     array_buffer_->addBuffer(*vertex_buffer_, layout);
 
     // ------------------------- TEXTURES ------------------
@@ -135,7 +141,7 @@ void ExampleGameLogic::update()
 
     if (input.isMouseButtonReleased(MouseButton::MOUSE_BUTTON_RIGHT))
         input.setCursorEnabled(true);
-
+  
     // camera rotation
     if (input.isMouseButtonDown(MouseButton::MOUSE_BUTTON_RIGHT))
     {

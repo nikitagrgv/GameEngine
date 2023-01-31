@@ -68,7 +68,7 @@ add_executable(LearnOpenGL
         src/engine/core/GLFWWatcher.h
         src/engine/core/IdContainer.h
         src/engine/core/events/WindowEvents.h
-        src/engine/core/InputEnums.cpp src/engine/mesh/Mesh.cpp src/engine/mesh/Mesh.h)
+        src/engine/core/InputEnums.cpp src/engine/mesh/Mesh.cpp src/engine/mesh/Mesh.h src/engine/mesh/ObjMeshLoader.cpp src/engine/mesh/ObjMeshLoader.h)
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
 

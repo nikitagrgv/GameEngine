@@ -5,7 +5,7 @@
 
 int main()
 {
-    auto& engine = Engine::get(); 
+    auto& engine = Engine::get();
 
     engine.init("Engine", 800, 600);
 
