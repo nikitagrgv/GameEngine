@@ -2,6 +2,11 @@
 
 #include "MathUtils.h"
 
+Camera::Camera()
+{
+    update_all_matrices();
+}
+
 Camera::Camera(float fov, float aspect, float z_near, float z_far)
 {
     setPerspectiveProjection(fov, aspect, z_near, z_far);

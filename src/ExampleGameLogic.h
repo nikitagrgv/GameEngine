@@ -32,12 +32,15 @@ private:
     void imgui_after_draw();
 
     void compile_shaders();
+    void reload_camera_projection(float aspect);
 
 private:
     Input& input{Input::get()};
     Engine& engine{Engine::get()};
 
     Renderer renderer_;
+
+    int glfw_watcher_callback_id_{-1};
 
     std::unique_ptr<IndexBuffer> index_buffer_;
     std::unique_ptr<VertexBuffer> vertex_buffer_;

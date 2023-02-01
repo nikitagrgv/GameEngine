@@ -2,14 +2,16 @@
 
 #include "engine/core/Engine.h"
 #include "engine/core/FileManager.h"
+#include "engine/core/GLFWWatcher.h"
 #include "engine/core/Input.h"
 #include "engine/core/MathUtils.h"
 #include "engine/core/events/InputEvents.h"
+#include "engine/core/events/WindowEvents.h"
+#include "engine/mesh/ObjMeshLoader.h"
+#include "engine/render/OpenGLUtils.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
-#include "engine/render/OpenGLUtils.h"
-#include "engine/mesh/ObjMeshLoader.h"
 
 #include <GLFW/glfw3.h>
 
@@ -58,16 +60,30 @@ void ExampleGameLogic::init()
 
     // ------------------------- CAMERA ------------------
 
-    const auto fov = glm::radians(60.f);
-    const float aspect = (float)engine.getWidth() / (float)engine.getHeight();
-    const float z_near = 0.1f;
-    const float z_far = 10000.f;
+    camera_ = std::make_unique<Camera>();
+    camera_->setPosition(Math::VEC_FORWARD * -5.f);
 
-    camera_ = std::make_unique<Camera>(fov, aspect, z_near, z_far);
-    camera_->setPosition(Math::VEC_FORWARD * -2.f);
+    reload_camera_projection((float)engine.getWidth() / (float)engine.getHeight());
+    glfw_watcher_callback_id_ = GLFWWatcher::get().addCallback(
+        [this](const EventPtr& event) {
+            if (event->getEventType() == EventType::FramebufferSizeChanged)
+            {
+                const auto* e = static_cast<FramebufferSizeChangedEvent*>(event.get());
+                reload_camera_projection((float)e->getWidth() / (float)e->getHeight());
+            }
+        },
+        EVENT_CATEGORY_WINDOW);
 
     // ------------------------- RENDERER ------------------
     renderer_.setBlending();
+}
+
+void ExampleGameLogic::reload_camera_projection(float aspect)
+{
+    constexpr auto fov = glm::radians(60.f);
+    constexpr float z_near = 0.1f;
+    constexpr float z_far = 10000.f;
+    camera_->setPerspectiveProjection(fov, aspect, z_near, z_far);
 }
 
 void ExampleGameLogic::render()
@@ -202,6 +218,8 @@ void ExampleGameLogic::update()
 
 void ExampleGameLogic::shutdown()
 {
+    if (glfw_watcher_callback_id_ != -1)
+        GLFWWatcher::get().removeCallback(glfw_watcher_callback_id_);
     imgui_shutdown();
 }
 

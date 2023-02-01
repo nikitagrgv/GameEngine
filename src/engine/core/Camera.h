@@ -6,6 +6,7 @@
 class Camera
 {
 public:
+    Camera();
     Camera(float fov, float aspect, float z_near, float z_far);
 
     glm::mat4 getTransform() const { return transform_; }

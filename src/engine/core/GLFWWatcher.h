@@ -15,15 +15,15 @@ class GLFWWatcher final
 public:
     static GLFWWatcher& get();
 
+    int addCallback(const std::function<void(EventPtr)>& callback, int categories);
+    void removeCallback(int callback);
+
 private:
     GLFWWatcher() = default;
     ~GLFWWatcher() = default;
 
     void init(GLFWwindow* glfw_window);
     void shutdown();
-
-    int addCallback(const std::function<void(EventPtr)>& callback, int categories);
-    void removeCallback(int callback);
 
     void glfw_framebuffer_size_callback(int width, int height);
     void glfw_key_callback(int glfw_key, int scancode, int action, int mods);
