@@ -1,5 +1,6 @@
 #include "Shader.h"
 
+#include <functional>
 #include <iostream>
 #include <string>
 
@@ -11,6 +12,25 @@ unsigned int create_program(unsigned int vertex_shader, unsigned int fragment_sh
 bool check_shader_linking(unsigned int program_id);
 } // namespace
 
+Shader::Shader(Shader&& other) noexcept
+{
+    swap(other);
+}
+
+Shader& Shader::operator=(Shader&& other) noexcept
+{
+    if (this != &other)
+        swap(other);
+
+    return *this;
+}
+
+void Shader::swap(Shader& other)
+{
+    std::swap(this->program_id_, other.program_id_);
+    std::swap(this->location_cache_, other.location_cache_);
+}
+
 Shader::Shader(const std::string& filename_vertex, const std::string& filename_fragment)
 {
     setShaders(filename_vertex, filename_fragment);
@@ -18,36 +38,28 @@ Shader::Shader(const std::string& filename_vertex, const std::string& filename_f
 
 Shader::~Shader()
 {
-    if (program_id_ != 0)
+    if (program_id_)
         glDeleteProgram(program_id_);
 }
 
 void Shader::setShaders(const std::string& filename_vertex, const std::string& filename_fragment)
 {
-    is_valid_ = false;
-
     location_cache_.clear();
 
     const std::string vertex_shader_source = FileManager::getFileText(filename_vertex.c_str());
     const std::string fragment_shader_source = FileManager::getFileText(filename_fragment.c_str());
 
-    unsigned int vertex_shader = create_shader(vertex_shader_source.c_str(), GL_VERTEX_SHADER);
+    unsigned int vertex_shader = create_shader(vertex_shader_source, GL_VERTEX_SHADER);
     if (vertex_shader == 0)
         return;
 
-    unsigned int fragment_shader = create_shader(fragment_shader_source.c_str(),
-        GL_FRAGMENT_SHADER);
+    unsigned int fragment_shader = create_shader(fragment_shader_source, GL_FRAGMENT_SHADER);
     if (fragment_shader == 0)
         return;
 
     program_id_ = create_program(vertex_shader, fragment_shader);
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
-
-    if (program_id_ == 0)
-        return;
-
-    is_valid_ = true;
 }
 
 void Shader::bind() const
@@ -57,7 +69,7 @@ void Shader::bind() const
         std::cout << "Cannot bind invalid shader" << std::endl;
         return;
     }
-    
+
     glUseProgram(program_id_);
 }
 

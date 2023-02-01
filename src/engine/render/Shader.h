@@ -18,15 +18,18 @@ public:
     Shader(const std::string& filename_vertex, const std::string& filename_fragment);
     ~Shader();
 
-    Shader(Shader&) = delete;
-    Shader& operator=(Shader&) = delete;
+    Shader(const Shader&) = delete;
+    Shader& operator=(const Shader&) = delete;
+
+    Shader(Shader&& other) noexcept;
+    Shader& operator=(Shader&& other) noexcept;
 
     void setShaders(const std::string& filename_vertex, const std::string& filename_fragment);
 
     void bind() const;
     void unbind() const;
 
-    bool isValid() const { return is_valid_; }
+    bool isValid() const { return program_id_ != 0; }
 
     int getUniformLocation(const std::string& name) const;
 
@@ -101,11 +104,11 @@ public:
         glUniformMatrix4fv(location, 1, false, glm::value_ptr(value));
     }
 
-    // -------------------------------------------------------
+private:
+    void swap(Shader& other);
 
 private:
     mutable std::unordered_map<std::string, int> location_cache_;
 
     unsigned int program_id_{0};
-    bool is_valid_{false};
 };

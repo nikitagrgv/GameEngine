@@ -1,5 +1,23 @@
 #include "VertexArray.h"
 
+VertexArray::VertexArray(VertexArray&& other) noexcept
+{
+    swap(other);
+}
+
+VertexArray& VertexArray::operator=(VertexArray&& other) noexcept
+{
+    if (this != &other)
+        swap(other);
+
+    return *this;
+}
+
+void VertexArray::swap(VertexArray& other)
+{
+    std::swap(this->buffer_id_, other.buffer_id_);
+}
+
 VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &buffer_id_);
@@ -7,11 +25,13 @@ VertexArray::VertexArray()
 
 VertexArray::~VertexArray()
 {
-    glDeleteVertexArrays(1, &buffer_id_);
+    if (buffer_id_)
+        glDeleteVertexArrays(1, &buffer_id_);
 }
 
 void VertexArray::bind() const
 {
+    assert(isValid());
     glBindVertexArray(buffer_id_);
 }
 
@@ -20,7 +40,7 @@ void VertexArray::unbind() const
     glBindVertexArray(0);
 }
 
-void VertexArray::addBuffer(const VertexBuffer &vertex_buffer, const VertexBufferLayout layout)
+void VertexArray::addBuffer(const VertexBuffer &vertex_buffer, const VertexBufferLayout& layout)
 {
     bind();
     vertex_buffer.bind();
