@@ -171,7 +171,10 @@ void ExampleGameLogic::update()
 
     // camera movement
     {
-        constexpr float speed = 1.f;
+        float speed = 1.f;
+
+        if (input.isKeyDown(Key::KEY_LEFT_SHIFT))
+            speed *= 4;
 
         glm::vec3 offset{};
 
@@ -187,7 +190,7 @@ void ExampleGameLogic::update()
 
         if (input.isKeyDown(Key::KEY_SPACE))
             offset += Math::getUp(camera_->getTransform());
-        if (input.isKeyDown(Key::KEY_LEFT_SHIFT))
+        if (input.isKeyDown(Key::KEY_LEFT_CONTROL))
             offset -= Math::getUp(camera_->getTransform());
 
         offset *= speed * dt;
