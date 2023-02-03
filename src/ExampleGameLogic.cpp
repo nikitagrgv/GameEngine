@@ -66,9 +66,8 @@ void ExampleGameLogic::init()
     reload_camera_projection((float)engine.getWidth() / (float)engine.getHeight());
     glfw_watcher_callback_id_ = GLFWWatcher::get().addCallback(
         [this](const EventPtr& event) {
-            if (event->getEventType() == EventType::FramebufferSizeChanged)
+            if (const auto* e = event_cast<FramebufferSizeChangedEvent>(event.get()))
             {
-                const auto* e = static_cast<FramebufferSizeChangedEvent*>(event.get());
                 reload_camera_projection((float)e->getWidth() / (float)e->getHeight());
             }
         },

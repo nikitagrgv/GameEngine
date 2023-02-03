@@ -62,3 +62,9 @@ public:
 };
 
 using EventPtr = std::unique_ptr<Event>;
+
+template <typename To, typename From>
+To* event_cast(From* p)
+{
+    return p->getEventType() == To::getEventTypeStatic() ? static_cast<To*>(p) : nullptr;
+}

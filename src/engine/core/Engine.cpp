@@ -157,6 +157,6 @@ void Engine::shutdown()
 
 void Engine::onEvent(EventPtr event)
 {
-    if (auto* e = dynamic_cast<FramebufferSizeChangedEvent*>(event.get()))
+    if (const auto* e = event_cast<FramebufferSizeChangedEvent>(event.get()))
         update_viewport_size(e->getWidth(), e->getHeight());
 }
