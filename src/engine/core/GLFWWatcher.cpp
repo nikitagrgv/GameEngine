@@ -27,6 +27,11 @@ void GLFWWatcher::init(GLFWwindow* glfw_window)
         [](GLFWwindow* window, int button, int action, int mods) {
             GLFWWatcher::get().glfw_mouse_button_callback(button, action, mods);
         });
+
+    glfwSetCursorPosCallback(glfw_window,
+        [](GLFWwindow* window, double pos_x, double pos_y) {
+            GLFWWatcher::get().glfw_cursor_pos_callback(pos_x, pos_y);
+        });
 }
 
 int GLFWWatcher::addCallback(const std::function<void(EventPtr)>& callback, int categories)
@@ -81,6 +86,19 @@ void GLFWWatcher::glfw_mouse_button_callback(int glfw_button, int action, int mo
         callbacks_[i].callback(std::make_unique<MousePressEvent>(
             button,
             action == GLFW_PRESS ? KeyState::PRESSED : KeyState::RELEASED));
+    }
+}
+
+void GLFWWatcher::glfw_cursor_pos_callback(double pos_x, double pos_y)
+{
+    for (int i = 0; i < callbacks_.count(); i++)
+    {
+        if (!Event::isInCategory(EVENT_CATEGORY_INPUT, callbacks_[i].categories))
+            continue;
+
+        callbacks_[i].callback(std::make_unique<MouseMovedEvent>(
+            pos_x,
+            pos_y));
     }
 }
 

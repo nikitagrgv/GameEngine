@@ -56,6 +56,9 @@ private:
     void handle_event(const KeyPressEvent& event);
     void handle_event(const MousePressEvent& event);
 
+    void clear_states();
+    void update_states();
+
 private:
     GLFWwindow* glfw_window_{nullptr};
 
@@ -80,6 +83,4 @@ private:
         std::function<void()> callback;
     };
     IdContainer<MouseButtonCallback> mouse_button_callbacks_;
-    void clear_states();
-    void update_states();
 };

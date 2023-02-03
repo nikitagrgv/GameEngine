@@ -28,6 +28,7 @@ private:
     void glfw_framebuffer_size_callback(int width, int height);
     void glfw_key_callback(int glfw_key, int scancode, int action, int mods);
     void glfw_mouse_button_callback(int glfw_button, int action, int mods);
+    void glfw_cursor_pos_callback(double pos_x, double pos_y);
 
 private:
     struct EventCallback
