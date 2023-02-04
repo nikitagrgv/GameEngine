@@ -2,30 +2,33 @@
 
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
+#include "engine/core/Object.h"
+#include "engine/core/SharedPtr.h"
 
-class VertexArray
+class VertexArray;
+using VertexArrayPtr = SharedPtr<VertexArray>;
+
+class VertexArray final : public Object
 {
-
 public:
-    VertexArray();
-    ~VertexArray();
+    static VertexArrayPtr create();
 
     VertexArray(const VertexArray&) = delete;
     VertexArray& operator=(const VertexArray&) = delete;
-
-    VertexArray(VertexArray&& other) noexcept;
-    VertexArray& operator=(VertexArray&& other) noexcept;
 
     bool isValid() const { return buffer_id_ != 0; }
 
     void bind() const;
     void unbind() const;
 
-    void addBuffer(const VertexBuffer& vertex_buffer, const VertexBufferLayout& layout);
+    void addBuffer(const VertexBufferPtr& vertex_buffer, const VertexBufferLayout& layout);
 
 private:
-    void swap(VertexArray& other);
+    VertexArray();
+    ~VertexArray() override;
 
 private:
+    std::vector<VertexBufferPtr> vertex_buffers_;
+
     unsigned int buffer_id_{0};
 };

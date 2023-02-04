@@ -27,30 +27,20 @@ void ExampleGameLogic::init()
     compile_shaders();
 
     // ------------------------- BUFFERS ------------------
-    array_buffer_ = std::make_unique<VertexArray>();
-    array_buffer_->bind();
+
     GL_CHECK_ERROR();
 
     ObjMeshLoader loader("../data/models/cube.obj");
     assert(loader.isLoaded());
-    index_buffer_ = std::make_unique<IndexBuffer>(&loader.getIndices()[0], loader.getIndices().size());
-    vertex_buffer_ = std::make_unique<VertexBuffer>(&loader.getVertices()[0], loader.getVertices().size() * sizeof(loader.getVertices()[0]));
-    VertexBufferLayout layout;
-    layout.push<float>(3); // position
-    layout.push<float>(2); // texture coordinates
-    layout.push<float>(3); // normals
-    array_buffer_->addBuffer(*vertex_buffer_, layout);
+    mesh_ = loader.getMesh();
 
     // ------------------------- TEXTURES ------------------
 
-    texture0_ = std::make_unique<Texture>("../data/textures/container.jpg");
-    texture1_ = std::make_unique<Texture>("../data/textures/awesomeface.png");
+    texture0_ = Texture::create("../data/textures/container.jpg");
+    texture1_ = Texture::create("../data/textures/awesomeface.png");
 
     // ------------------------- UNBINDING ------------------
 
-    array_buffer_->unbind();
-    vertex_buffer_->unbind();
-    index_buffer_->unbind();
     shader_->unbind();
     texture0_->unbind();
     texture1_->unbind();
@@ -99,7 +89,7 @@ void ExampleGameLogic::render()
         texture0_->bind(0);
         texture1_->bind(1);
 
-        renderer_.draw(*array_buffer_, *index_buffer_, *shader_);
+        renderer_.draw(mesh_, shader_);
     }
 
     // second
@@ -114,7 +104,7 @@ void ExampleGameLogic::render()
         texture0_->bind(0);
         texture1_->bind(1);
 
-        renderer_.draw(*array_buffer_, *index_buffer_, *shader_);
+        renderer_.draw(mesh_, shader_);
     }
 
     GL_CHECK_ERROR();
@@ -301,7 +291,7 @@ void ExampleGameLogic::compile_shaders()
     if (shader_)
         shader_->setShaders(vertex_shader_filename, fragment_shader_filename);
     else
-        shader_ = std::make_unique<Shader>(vertex_shader_filename, fragment_shader_filename);
+        shader_ = Shader::create(vertex_shader_filename, fragment_shader_filename);
 
     if (!shader_->isValid())
         std::cout << "SHADER INVALID!" << std::endl;

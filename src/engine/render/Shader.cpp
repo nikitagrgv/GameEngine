@@ -12,25 +12,6 @@ unsigned int create_program(unsigned int vertex_shader, unsigned int fragment_sh
 bool check_shader_linking(unsigned int program_id);
 } // namespace
 
-Shader::Shader(Shader&& other) noexcept
-{
-    swap(other);
-}
-
-Shader& Shader::operator=(Shader&& other) noexcept
-{
-    if (this != &other)
-        swap(other);
-
-    return *this;
-}
-
-void Shader::swap(Shader& other)
-{
-    std::swap(this->program_id_, other.program_id_);
-    std::swap(this->location_cache_, other.location_cache_);
-}
-
 Shader::Shader(const std::string& filename_vertex, const std::string& filename_fragment)
 {
     setShaders(filename_vertex, filename_fragment);
@@ -92,6 +73,11 @@ int Shader::getUniformLocation(const std::string& name) const
         location_cache_[name] = location;
 
     return location;
+}
+
+ShaderPtr Shader::create(const std::string& filename_vertex, const std::string& filename_fragment)
+{
+    return ShaderPtr(new Shader(filename_vertex, filename_fragment));
 }
 
 namespace

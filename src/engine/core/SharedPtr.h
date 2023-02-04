@@ -3,6 +3,7 @@
 #include "Object.h"
 
 #include <algorithm>
+#include <cassert>
 
 template<class T>
 class SharedPtr

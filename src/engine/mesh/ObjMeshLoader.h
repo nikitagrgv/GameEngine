@@ -17,6 +17,8 @@ public:
     const std::vector<Vertex>& getVertices() const { return vertices_; }
     const std::vector<unsigned int>& getIndices() const { return indices_; }
 
+    MeshPtr getMesh() { return mesh_; }
+
 private:
     struct ObjVertex
     {
@@ -48,7 +50,11 @@ private:
 
     unsigned int create_or_get_vertex_index(const ObjVertex& obj_vertex);
 
+    void create_mesh();
+
 private:
+    MeshPtr mesh_;
+
     bool is_loaded_{false};
 
     std::string name_{"Noname"};

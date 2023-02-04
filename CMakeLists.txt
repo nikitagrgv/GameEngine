@@ -77,7 +77,7 @@ add_executable(LearnOpenGL
         src/engine/nodes/Node.h
         src/engine/nodes/Scene.cpp
         src/engine/nodes/Scene.h
-        src/engine/utils/VectorUtils.h src/engine/core/Object.cpp src/engine/core/Object.h src/engine/core/SharedPtr.h)
+        src/engine/utils/VectorUtils.h src/engine/core/Object.cpp src/engine/core/Object.h src/engine/core/SharedPtr.h src/engine/utils/StringUtils.h)
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
 

@@ -1,5 +1,7 @@
 #include "ObjMeshLoader.h"
 
+#include "engine/utils/StringUtils.h"
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -20,7 +22,6 @@ enum class Token
     Face,
 };
 
-std::vector<std::string> split_string(const std::string& string, char delim);
 Token get_token(std::stringstream& line);
 
 } // namespace
@@ -68,7 +69,27 @@ ObjMeshLoader::ObjMeshLoader(const std::string& filename)
         }
     }
 
+    create_mesh();
+
     is_loaded_ = true;
+}
+
+void ObjMeshLoader::create_mesh()
+{
+    auto vertex_array = VertexArray::create();
+    vertex_array->bind();
+    auto index_buffer = IndexBuffer::create(&indices_[0], indices_.size());
+    auto vertex_buffer = VertexBuffer::create(&vertices_[0], vertices_.size() * sizeof(Vertex));
+    VertexBufferLayout layout;
+    layout.push<float>(3); // position
+    layout.push<float>(2); // texture coordinates
+    layout.push<float>(3); // normals
+    vertex_array->addBuffer(vertex_buffer, layout);
+    vertex_array->unbind();
+    vertex_buffer->unbind();
+    index_buffer->unbind();
+
+    mesh_ = Mesh::create(vertex_array, index_buffer, vertex_buffer);
 }
 
 void ObjMeshLoader::handle_name_token(std::stringstream& line)
@@ -123,7 +144,7 @@ void ObjMeshLoader::handle_face_token(std::stringstream& line)
             return;
         }
 
-        std::vector<std::string> indices_strings = split_string(str, '/');
+        std::vector<std::string> indices_strings = String::splitString(str, '/');
 
         if (indices_strings.size() != 3)
         {
@@ -204,20 +225,6 @@ Token get_token(std::stringstream& line)
         return Token::Face;
 
     return Token::Undefined;
-}
-
-std::vector<std::string> split_string(const std::string& string, char delim)
-{
-    std::vector<std::string> result;
-    std::stringstream ss(string);
-    std::string item;
-
-    while (getline(ss, item, delim))
-    {
-        result.push_back(item);
-    }
-
-    return result;
 }
 
 } // namespace

@@ -45,13 +45,11 @@ private:
 
     int glfw_watcher_callback_id_{-1};
 
-    std::unique_ptr<IndexBuffer> index_buffer_;
-    std::unique_ptr<VertexBuffer> vertex_buffer_;
-    std::unique_ptr<VertexArray> array_buffer_;
-    std::unique_ptr<Shader> shader_;
+    MeshPtr mesh_;
+    ShaderPtr shader_;
 
-    std::unique_ptr<Texture> texture0_;
-    std::unique_ptr<Texture> texture1_;
+    TexturePtr texture0_;
+    TexturePtr texture1_;
 
     bool wireframe_mode_ = false;
 

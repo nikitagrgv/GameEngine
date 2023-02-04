@@ -12,16 +12,17 @@
 #include <iostream>
 
 class Renderer
-{    
+{
 public:
     Renderer();
     ~Renderer();
 
     void setBlending(); // TODO dummy method, later add some parameter
 
-    void draw(const VertexArray& vertex_array, const IndexBuffer& index_buffer, const Shader& shader) const;
-    void draw(const Mesh& mesh, const Shader& shader) const;
-
+    void draw(
+        const VertexArrayPtr& vertex_array,
+        const IndexBufferPtr& index_buffer,
+        const ShaderPtr& shader) const;
+    
+    void draw(const MeshPtr& mesh, const ShaderPtr& shader) const;
 };
-
-

@@ -1,30 +1,33 @@
 #pragma once
 
+#include "engine/core/Object.h"
+#include "engine/core/SharedPtr.h"
+
 #include <string>
 
-class Texture
+class Texture;
+using TexturePtr = SharedPtr<Texture>;
+
+class Texture final : public Object
 {
 public:
-    explicit Texture(const std::string& image_file, bool save_data_after_loading = false);
-    ~Texture();
+    static TexturePtr create(const std::string& image_file, bool save_data_after_loading = false);
 
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;
-
-    Texture(Texture&& other) noexcept;
-    Texture& operator=(Texture&& other) noexcept;
 
     bool isValid() const { return texture_id_ != 0; }
 
     int getWidth() const { return width_; }
     int getHeight() const { return height_; }
-    int getNumberChannels() const { return number_channels_; }
+    int getNumChannels() const { return number_channels_; }
 
     void bind(int slot = 0) const;
     void unbind() const;
 
 private:
-    void swap(Texture& other);
+    explicit Texture(const std::string& image_file, bool save_data_after_loading = false);
+    ~Texture() override;
 
 private:
     unsigned int texture_id_{0};

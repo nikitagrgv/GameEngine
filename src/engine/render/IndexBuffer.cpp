@@ -8,25 +8,6 @@
 #include <algorithm>
 #include <cassert>
 
-IndexBuffer::IndexBuffer(IndexBuffer&& other) noexcept
-{
-    swap(other);
-}
-
-IndexBuffer& IndexBuffer::operator=(IndexBuffer&& other) noexcept
-{
-    if (this != &other)
-        swap(other);
-
-    return *this;
-}
-
-void IndexBuffer::swap(IndexBuffer& other)
-{
-    std::swap(this->buffer_id_, other.buffer_id_);
-    std::swap(this->count_, other.count_);
-}
-
 IndexBuffer::IndexBuffer(const unsigned int* data, int count)
     : count_(count)
 {
@@ -50,4 +31,9 @@ void IndexBuffer::bind() const
 void IndexBuffer::unbind() const
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+IndexBufferPtr IndexBuffer::create(const unsigned int* data, int count)
+{
+    return IndexBufferPtr(new IndexBuffer(data, count));
 }

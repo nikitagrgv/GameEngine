@@ -10,7 +10,6 @@
 #include "../core/SharedPtr.h"
 
 class Node;
-
 using NodePtr = SharedPtr<Node>;
 
 class Node : public Object

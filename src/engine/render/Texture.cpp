@@ -10,28 +10,6 @@
 #include <functional>
 #include <iostream>
 
-Texture::Texture(Texture&& other) noexcept
-{
-    swap(other);
-}
-
-Texture& Texture::operator=(Texture&& other) noexcept
-{
-    if (this != &other)
-        swap(other);
-
-    return *this;
-}
-
-void Texture::swap(Texture& other)
-{
-    std::swap(this->texture_id_, other.texture_id_);
-    std::swap(this->data_, other.data_);
-    std::swap(this->width_, other.width_);
-    std::swap(this->height_, other.height_);
-    std::swap(this->number_channels_, other.number_channels_);
-}
-
 Texture::Texture(const std::string& image_file, bool save_data_after_loading)
 {
     stbi_set_flip_vertically_on_load(true);
@@ -84,4 +62,9 @@ void Texture::bind(int slot) const
 void Texture::unbind() const
 {
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+TexturePtr Texture::create(const std::string& image_file, bool save_data_after_loading)
+{
+    return TexturePtr(new Texture(image_file, save_data_after_loading));
 }

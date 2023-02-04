@@ -1,15 +1,25 @@
 #pragma once
 
+#include "engine/core/Object.h"
 #include "engine/render/IndexBuffer.h"
 #include "engine/render/VertexArray.h"
+#include "engine/render/VertexBuffer.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class Mesh
+class Mesh;
+using MeshPtr = SharedPtr<Mesh>;
+
+class Mesh final : public Object
 {
 public:
+    static MeshPtr create(
+        const VertexArrayPtr& vertex_array,
+        const IndexBufferPtr& index_buffer,
+        const VertexBufferPtr& vertex_buffer);
+
     struct Vertex
     {
         glm::vec3 position;
@@ -17,12 +27,19 @@ public:
         glm::vec3 normal;
     };
 
-    const VertexArray& getVertexArray() const { return vertex_array_; }
-    const IndexBuffer& getIndexBuffer() const { return index_buffer_; }
-    VertexArray& getVertexArray() { return vertex_array_; }
-    IndexBuffer& getIndexBuffer() { return index_buffer_; }
+    VertexBufferPtr getVertexBuffer() const { return vertex_buffer_; }
+    VertexArrayPtr getVertexArray() const { return vertex_array_; }
+    IndexBufferPtr getIndexBuffer() const { return index_buffer_; }
 
 private:
-    VertexArray vertex_array_;
-    IndexBuffer index_buffer_;
+    Mesh(
+        const VertexArrayPtr& vertex_array,
+        const IndexBufferPtr& index_buffer,
+        const VertexBufferPtr& vertex_buffer);
+    ~Mesh() override = default;
+
+private:
+    VertexArrayPtr vertex_array_;
+    IndexBufferPtr index_buffer_;
+    VertexBufferPtr vertex_buffer_;
 };

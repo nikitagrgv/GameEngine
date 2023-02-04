@@ -8,24 +8,6 @@
 #include <cassert>
 #include <functional>
 
-VertexBuffer::VertexBuffer(VertexBuffer&& other) noexcept
-{
-    swap(other);
-}
-
-VertexBuffer& VertexBuffer::operator=(VertexBuffer&& other) noexcept
-{
-    if (this != &other)
-        swap(other);
-
-    return *this;
-}
-
-void VertexBuffer::swap(VertexBuffer& other)
-{
-    std::swap(this->buffer_id_, other.buffer_id_);
-}
-
 VertexBuffer::VertexBuffer(const void* data, int size)
 {
     glGenBuffers(1, &buffer_id_);
@@ -48,4 +30,9 @@ void VertexBuffer::bind() const
 void VertexBuffer::unbind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+VertexBufferPtr VertexBuffer::create(const void* data, int size)
+{
+    return VertexBufferPtr(new VertexBuffer(data, size));
 }

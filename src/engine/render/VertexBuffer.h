@@ -1,16 +1,18 @@
 #pragma once
 
-class VertexBuffer
+#include "engine/core/Object.h"
+#include "engine/core/SharedPtr.h"
+
+class VertexBuffer;
+using VertexBufferPtr = SharedPtr<VertexBuffer>;
+
+class VertexBuffer final : public Object
 {
 public:
+    static VertexBufferPtr create(const void* data, int size);
+
     VertexBuffer(const VertexBuffer&) = delete;
     VertexBuffer& operator=(const VertexBuffer&) = delete;
-
-    VertexBuffer(VertexBuffer&& other) noexcept;
-    VertexBuffer& operator=(VertexBuffer&& other) noexcept;
-
-    VertexBuffer(const void* data, int size);
-    ~VertexBuffer();
 
     bool isValid() const { return buffer_id_ != 0; }
 
@@ -18,7 +20,8 @@ public:
     void unbind() const;
 
 private:
-    void swap(VertexBuffer& other);
+    VertexBuffer(const void* data, int size);
+    ~VertexBuffer() override;
 
 private:
     unsigned int buffer_id_{0};

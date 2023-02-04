@@ -1,16 +1,18 @@
 #pragma once
 
-class IndexBuffer
+#include "engine/core/Object.h"
+#include "engine/core/SharedPtr.h"
+
+class IndexBuffer;
+using IndexBufferPtr = SharedPtr<IndexBuffer>;
+
+class IndexBuffer final : public Object
 {
 public:
+    static IndexBufferPtr create(const unsigned int* data, int count);
+
     IndexBuffer(const IndexBuffer&) = delete;
     IndexBuffer& operator=(const IndexBuffer&) = delete;
-
-    IndexBuffer(IndexBuffer&& other) noexcept ;
-    IndexBuffer& operator=(IndexBuffer&& other) noexcept;
-
-    IndexBuffer(const unsigned int* data, int count);
-    ~IndexBuffer();
 
     bool isValid() const { return buffer_id_ != 0; }
 
@@ -20,7 +22,8 @@ public:
     void unbind() const;
 
 private:
-    void swap(IndexBuffer& other);
+    IndexBuffer(const unsigned int* data, int count);
+    ~IndexBuffer() override;
 
 private:
     unsigned int buffer_id_{0};

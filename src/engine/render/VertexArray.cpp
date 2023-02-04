@@ -1,23 +1,5 @@
 #include "VertexArray.h"
 
-VertexArray::VertexArray(VertexArray&& other) noexcept
-{
-    swap(other);
-}
-
-VertexArray& VertexArray::operator=(VertexArray&& other) noexcept
-{
-    if (this != &other)
-        swap(other);
-
-    return *this;
-}
-
-void VertexArray::swap(VertexArray& other)
-{
-    std::swap(this->buffer_id_, other.buffer_id_);
-}
-
 VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &buffer_id_);
@@ -40,10 +22,13 @@ void VertexArray::unbind() const
     glBindVertexArray(0);
 }
 
-void VertexArray::addBuffer(const VertexBuffer &vertex_buffer, const VertexBufferLayout& layout)
+void VertexArray::addBuffer(const VertexBufferPtr& vertex_buffer, const VertexBufferLayout& layout)
 {
+    // to prevent vertex buffer from deleting, we save string reference to it. now vertex array manages it
+    vertex_buffers_.push_back(vertex_buffer);
+
     bind();
-    vertex_buffer.bind();
+    vertex_buffer->bind();
 
     const auto& elements = layout.getElements();
     unsigned int offset = 0;
@@ -54,4 +39,9 @@ void VertexArray::addBuffer(const VertexBuffer &vertex_buffer, const VertexBuffe
         glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (const void*)offset);
         offset += element.count * VertexBufferElement::getSizeOfType(element.type);
     }
+}
+
+VertexArrayPtr VertexArray::create()
+{
+    return VertexArrayPtr(new VertexArray());
 }

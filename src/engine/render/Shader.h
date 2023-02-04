@@ -1,6 +1,8 @@
 #pragma once
 
 #include "engine/core/FileManager.h"
+#include "engine/core/Object.h"
+#include "engine/core/SharedPtr.h"
 
 // clang-format off
 #include "glad/glad.h"
@@ -12,17 +14,16 @@
 #include <string>
 #include <unordered_map>
 
-class Shader
+class Shader;
+using ShaderPtr = SharedPtr<Shader>;
+
+class Shader final : public Object
 {
 public:
-    Shader(const std::string& filename_vertex, const std::string& filename_fragment);
-    ~Shader();
+    static ShaderPtr create(const std::string& filename_vertex, const std::string& filename_fragment);
 
     Shader(const Shader&) = delete;
     Shader& operator=(const Shader&) = delete;
-
-    Shader(Shader&& other) noexcept;
-    Shader& operator=(Shader&& other) noexcept;
 
     void setShaders(const std::string& filename_vertex, const std::string& filename_fragment);
 
@@ -105,7 +106,8 @@ public:
     }
 
 private:
-    void swap(Shader& other);
+    Shader(const std::string& filename_vertex, const std::string& filename_fragment);
+    ~Shader() override;
 
 private:
     mutable std::unordered_map<std::string, int> location_cache_;
