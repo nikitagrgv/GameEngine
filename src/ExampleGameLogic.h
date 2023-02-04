@@ -10,6 +10,7 @@
 #include "engine/render/Texture.h"
 #include "engine/render/VertexArray.h"
 #include "engine/render/VertexBuffer.h"
+#include "engine/nodes/Node.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -35,6 +36,8 @@ private:
     void reload_camera_projection(float aspect);
 
 private:
+    NodePtr root_node_;
+
     Input& input{Input::get()};
     Engine& engine{Engine::get()};
 

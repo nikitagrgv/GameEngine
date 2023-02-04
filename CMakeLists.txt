@@ -60,7 +60,7 @@ add_executable(LearnOpenGL
         src/engine/render/Texture.cpp
         src/engine/core/Camera.cpp
         src/engine/core/Camera.h
-        src/engine/core/MathUtils.h
+        src/engine/utils/MathUtils.h
         src/engine/core/events/Event.h
         src/engine/core/events/InputEvents.h
         src/engine/core/InputEnums.h
@@ -68,7 +68,16 @@ add_executable(LearnOpenGL
         src/engine/core/GLFWWatcher.h
         src/engine/core/IdContainer.h
         src/engine/core/events/WindowEvents.h
-        src/engine/core/InputEnums.cpp src/engine/mesh/Mesh.cpp src/engine/mesh/Mesh.h src/engine/mesh/ObjMeshLoader.cpp src/engine/mesh/ObjMeshLoader.h)
+        src/engine/core/InputEnums.cpp
+        src/engine/mesh/Mesh.cpp
+        src/engine/mesh/Mesh.h
+        src/engine/mesh/ObjMeshLoader.cpp
+        src/engine/mesh/ObjMeshLoader.h
+        src/engine/nodes/Node.cpp
+        src/engine/nodes/Node.h
+        src/engine/nodes/Scene.cpp
+        src/engine/nodes/Scene.h
+        src/engine/utils/VectorUtils.h src/engine/core/Object.cpp src/engine/core/Object.h src/engine/core/SharedPtr.h)
 
 target_link_libraries(LearnOpenGL GLFW/glfw3 opengl32)
 

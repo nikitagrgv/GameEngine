@@ -4,11 +4,11 @@
 #include "engine/core/FileManager.h"
 #include "engine/core/GLFWWatcher.h"
 #include "engine/core/Input.h"
-#include "engine/core/MathUtils.h"
 #include "engine/core/events/InputEvents.h"
 #include "engine/core/events/WindowEvents.h"
 #include "engine/mesh/ObjMeshLoader.h"
 #include "engine/render/OpenGLUtils.h"
+#include "engine/utils/MathUtils.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -30,9 +30,6 @@ void ExampleGameLogic::init()
     array_buffer_ = std::make_unique<VertexArray>();
     array_buffer_->bind();
     GL_CHECK_ERROR();
-
-    //    index_buffer_ = std::make_unique<IndexBuffer>(indices_, (int)(sizeof(indices_) / sizeof(indices_[0])));
-    //    vertex_buffer_ = std::make_unique<VertexBuffer>(vertices_, (int)(sizeof(vertices_)));
 
     ObjMeshLoader loader("../data/models/cube.obj");
     assert(loader.isLoaded());
@@ -75,6 +72,9 @@ void ExampleGameLogic::init()
 
     // ------------------------- RENDERER ------------------
     renderer_.setBlending();
+
+    // ------------------------- RENDERER ------------------
+    root_node_ = Node::create("root", nullptr);
 }
 
 void ExampleGameLogic::reload_camera_projection(float aspect)
@@ -124,6 +124,37 @@ void ExampleGameLogic::render()
     imgui_after_draw();
 }
 
+static int iii = 0;
+
+static void print_nodes(Node* node, int level = 0)
+{
+    auto& input = Input::get();
+
+    std::string text;
+    for (int i = 0; i < level; ++i)
+        text += " ";
+
+    text += node->getName();
+
+    if (ImGui::Button(text.c_str()))
+    {
+        if (input.isKeyDown(Key::KEY_LEFT_CONTROL))
+        {
+            node->deleteForce();
+        }
+        else
+        {
+            iii++;
+            Node::create(std::to_string(iii), node);
+        }
+    }
+
+    for (int i = 0; i < node->getNumChildren(); ++i)
+    {
+        print_nodes(node->getChild(i), level + 1);
+    }
+}
+
 void ExampleGameLogic::imgui_draw()
 {
     ImGui::Begin("Another Window");
@@ -133,6 +164,12 @@ void ExampleGameLogic::imgui_draw()
     std::string fps_text = "FPS: ";
     fps_text += std::to_string(engine.getFps());
     ImGui::Text(fps_text.c_str());
+    ImGui::End();
+
+    ImGui::Begin("Hierarchy");
+    ImGui::BeginChild("Scrolling");
+    print_nodes(root_node_);
+    ImGui::EndChild();
     ImGui::End();
 
 }

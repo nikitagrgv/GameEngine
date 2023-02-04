@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-#include "MathUtils.h"
+#include "engine/utils/MathUtils.h"
 
 Camera::Camera()
 {
