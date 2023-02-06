@@ -15,10 +15,8 @@ using MeshPtr = SharedPtr<Mesh>;
 class Mesh final : public Object
 {
 public:
-    static MeshPtr create(
-        const VertexArrayPtr& vertex_array,
-        const IndexBufferPtr& index_buffer,
-        const VertexBufferPtr& vertex_buffer);
+    static MeshPtr create(VertexArrayPtr vertex_array, IndexBufferPtr index_buffer,
+        VertexBufferPtr vertex_buffer);
 
     struct Vertex
     {
@@ -27,15 +25,12 @@ public:
         glm::vec3 normal;
     };
 
-    VertexBufferPtr getVertexBuffer() const { return vertex_buffer_; }
-    VertexArrayPtr getVertexArray() const { return vertex_array_; }
-    IndexBufferPtr getIndexBuffer() const { return index_buffer_; }
+    const VertexBuffer& getVertexBuffer() const { return *vertex_buffer_; }
+    const VertexArray& getVertexArray() const { return *vertex_array_; }
+    const IndexBuffer& getIndexBuffer() const { return *index_buffer_; }
 
 private:
-    Mesh(
-        const VertexArrayPtr& vertex_array,
-        const IndexBufferPtr& index_buffer,
-        const VertexBufferPtr& vertex_buffer);
+    Mesh(VertexArrayPtr vertex_array, IndexBufferPtr index_buffer, VertexBufferPtr vertex_buffer);
     ~Mesh() override = default;
 
 private:

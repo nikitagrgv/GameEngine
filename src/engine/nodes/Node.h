@@ -39,6 +39,7 @@ public:
 
     void addChild(Node* child);
     int getNumChildren() const { return (int)children_.size(); }
+    // TODO return weak pointer?
     Node* getChild(int i) { return children_[i]; }
     const Node* getChild(int i) const { return children_[i]; }
     void removeChildren();

@@ -10,24 +10,24 @@ Renderer::~Renderer()
 }
 
 void Renderer::draw(
-    const VertexArrayPtr& vertex_array,
-    const IndexBufferPtr& index_buffer,
-    const ShaderPtr& shader) const
+    const VertexArray& vertex_array,
+    const IndexBuffer& index_buffer,
+    const Shader& shader) const
 {
-    shader->bind();
-    vertex_array->bind();
-    index_buffer->bind();
+    shader.bind();
+    vertex_array.bind();
+    index_buffer.bind();
 
-    glDrawElements(GL_TRIANGLES, index_buffer->getCount(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, index_buffer.getCount(), GL_UNSIGNED_INT, nullptr);
 
-    vertex_array->unbind();
-    index_buffer->unbind();
-    shader->unbind();
+    vertex_array.unbind();
+    index_buffer.unbind();
+    shader.unbind();
 }
 
-void Renderer::draw(const MeshPtr& mesh, const ShaderPtr& shader) const
+void Renderer::draw(const Mesh& mesh, const Shader& shader) const
 {
-    draw(mesh->getVertexArray(), mesh->getIndexBuffer(), shader);
+    draw(mesh.getVertexArray(), mesh.getIndexBuffer(), shader);
 }
 
 void Renderer::setBlending()

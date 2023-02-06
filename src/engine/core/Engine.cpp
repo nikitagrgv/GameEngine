@@ -51,12 +51,12 @@ void Engine::run()
         delta_time_ = current_time - time_;
         time_ = current_time;
 
+        Input::get().update();
+        glfwPollEvents();
+
         update();
         render();
         swap();
-
-        Input::get().update();
-        glfwPollEvents();
     }
 
     shutdown();

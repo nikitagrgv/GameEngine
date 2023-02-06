@@ -1,18 +1,16 @@
 #include "Mesh.h"
 
-Mesh::Mesh(
-    const VertexArrayPtr& vertex_array,
-    const IndexBufferPtr& index_buffer,
-    const VertexBufferPtr& vertex_buffer)
-    : vertex_array_(vertex_array)
-    , index_buffer_(index_buffer)
-    , vertex_buffer_(vertex_buffer)
+#include <utility>
+
+Mesh::Mesh(VertexArrayPtr vertex_array, IndexBufferPtr index_buffer, VertexBufferPtr vertex_buffer)
+    : vertex_array_(std::move(vertex_array))
+    , index_buffer_(std::move(index_buffer))
+    , vertex_buffer_(std::move(vertex_buffer))
 {}
 
-MeshPtr Mesh::create(
-    const VertexArrayPtr& vertex_array,
-    const IndexBufferPtr& index_buffer,
-    const VertexBufferPtr& vertex_buffer)
+MeshPtr Mesh::create(VertexArrayPtr vertex_array, IndexBufferPtr index_buffer,
+    VertexBufferPtr vertex_buffer)
 {
-    return MeshPtr(new Mesh(vertex_array, index_buffer, vertex_buffer));
+    return MeshPtr(
+        new Mesh(std::move(vertex_array), std::move(index_buffer), std::move(vertex_buffer)));
 }

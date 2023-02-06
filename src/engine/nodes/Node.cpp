@@ -43,12 +43,11 @@ void Node::removeChildren()
 
 void Node::set_parent(Node* node, Node* parent)
 {
-    if (!node)
-        return;
+    assert(node);
 
     if (!parent)
     {
-        node->parent_ = parent;
+        node->parent_ = nullptr;
         return;
     }
 
@@ -90,7 +89,7 @@ void Node::deleteForce()
 {
     if (!parent_)
     {
-        SharedPtr<Node>(this);
+        SharedPtr<Node>(this); // TODO: do something better? or change architecture of node management
         return;
     }
 

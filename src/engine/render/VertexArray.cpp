@@ -24,7 +24,7 @@ void VertexArray::unbind() const
 
 void VertexArray::addBuffer(const VertexBufferPtr& vertex_buffer, const VertexBufferLayout& layout)
 {
-    // to prevent vertex buffer from deleting, we save string reference to it. now vertex array manages it
+    // to prevent vertex buffer from deleting, we save strong reference to it. now vertex array manages it
     vertex_buffers_.push_back(vertex_buffer);
 
     bind();

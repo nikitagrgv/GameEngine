@@ -89,7 +89,7 @@ void ExampleGameLogic::render()
         texture0_->bind(0);
         texture1_->bind(1);
 
-        renderer_.draw(mesh_, shader_);
+        renderer_.draw(*mesh_, *shader_);
     }
 
     // second
@@ -104,7 +104,7 @@ void ExampleGameLogic::render()
         texture0_->bind(0);
         texture1_->bind(1);
 
-        renderer_.draw(mesh_, shader_);
+        renderer_.draw(*mesh_, *shader_);
     }
 
     GL_CHECK_ERROR();
