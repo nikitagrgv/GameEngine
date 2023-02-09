@@ -64,7 +64,7 @@ void ExampleGameLogic::init()
     renderer_.setBlending();
 
     // ------------------------- RENDERER ------------------
-    root_node_ = Node::create("root", nullptr);
+    Node::create("root", nullptr);
 }
 
 void ExampleGameLogic::reload_camera_projection(float aspect)
@@ -115,6 +115,11 @@ void ExampleGameLogic::render()
 }
 
 static int iii = 0;
+std::string generate_name()
+{
+    iii++;
+    return std::to_string(iii);
+}
 
 static void print_nodes(Node* node, int level = 0)
 {
@@ -128,14 +133,14 @@ static void print_nodes(Node* node, int level = 0)
 
     if (ImGui::Button(text.c_str()))
     {
-        if (input.isKeyDown(Key::KEY_LEFT_CONTROL))
+        if (input.isKeyDown(Key::KEY_LEFT_SHIFT))
         {
             node->deleteForce();
+            return;
         }
         else
         {
-            iii++;
-            Node::create(std::to_string(iii), node);
+            Node::create(generate_name(), node);
         }
     }
 
@@ -158,7 +163,15 @@ void ExampleGameLogic::imgui_draw()
 
     ImGui::Begin("Hierarchy");
     ImGui::BeginChild("Scrolling");
-    print_nodes(root_node_);
+
+    if (ImGui::Button("CREATE NEW ROOT NODE"))
+        Node::create(generate_name());
+
+    for (auto* node : Node::getAllNodes())
+    {
+        if (node->isRootNode())
+            print_nodes(node);
+    }
     ImGui::EndChild();
     ImGui::End();
 

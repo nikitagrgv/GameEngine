@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <unordered_set>
 
 #include "../core/Object.h"
 #include "../core/SharedPtr.h"
@@ -15,7 +16,7 @@ using NodePtr = SharedPtr<Node>;
 class Node : public Object
 {
 public:
-    static NodePtr create(const std::string& name = "noname", Node* parent = nullptr);
+    static Node* create(std::string name = "noname", Node* parent = nullptr);
 
     Node(const Node& other) = delete;
     Node& operator=(const Node& other) = delete;
@@ -35,6 +36,7 @@ public:
     const std::string& getName() const { return name_; }
     void setName(const std::string& name) { name_ = name; }
     Node* getParent() const { return parent_; }
+    bool isRootNode() const { return parent_ == nullptr; }
     void setParent(Node* parent);
 
     void addChild(Node* child);
@@ -45,8 +47,10 @@ public:
     void removeChildren();
     void removeChild(int i);
 
+    static std::vector<Node*> getAllNodes();
+
 protected:
-    explicit Node(const std::string& name, Node* parent);
+    explicit Node(std::string  name, Node* parent);
     ~Node() override;
 
 private:
@@ -63,4 +67,7 @@ private:
 
     glm::mat4 transform_{1};
     glm::mat4 global_transform_{1};
+
+private:
+    static std::unordered_set<NodePtr, NodePtr::Hash> all_nodes_;
 };

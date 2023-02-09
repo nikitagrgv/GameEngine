@@ -36,8 +36,6 @@ private:
     void reload_camera_projection(float aspect);
 
 private:
-    NodePtr root_node_;
-
     Input& input{Input::get()};
     Engine& engine{Engine::get()};
 

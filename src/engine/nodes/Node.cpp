@@ -3,22 +3,23 @@
 #include "../utils/VectorUtils.h"
 
 #include <iostream>
+#include <utility>
 
-Node::Node(const std::string& name, Node* parent)
-    : name_(name)
+std::unordered_set<NodePtr, NodePtr::Hash> Node::all_nodes_{};
+
+Node::Node(std::string name, Node* parent)
+    : name_(std::move(name))
     , parent_(parent)
 {
+    all_nodes_.insert(NodePtr(this));
     setParent(parent_);
 }
 
 Node::~Node()
 {
+    assert(!parent_);
+    assert(children_.empty());
     std::cout << "deleted " << name_ << std::endl;
-    for (auto& child : children_)
-    {
-        child->parent_ = nullptr;
-    }
-    children_.clear();
 }
 
 void Node::addChild(Node* child)
@@ -44,19 +45,17 @@ void Node::removeChildren()
 void Node::set_parent(Node* node, Node* parent)
 {
     assert(node);
+    assert(!parent || !parent->has_parent(node));
 
-    if (!parent)
-    {
-        node->parent_ = nullptr;
-        return;
-    }
+    auto node_ptr = NodePtr(node);
 
-    assert(!parent->has_parent(node));
+    if (node->parent_)
+        Vector::removeElement(node->parent_->children_, node_ptr);
 
-    NodePtr node_ptr(node);
-    Vector::removeElement(node->parent_->children_, node_ptr);
-    parent->children_.push_back(std::move(node_ptr));
     node->parent_ = parent;
+    if (parent)
+        parent->children_.push_back(std::move(node_ptr));
+
     node->update_global_transform();
 }
 
@@ -80,25 +79,27 @@ void Node::update_global_transform()
     }
 }
 
-NodePtr Node::create(const std::string& name, Node* parent)
+Node* Node::create(std::string name, Node* parent)
 {
-    return NodePtr(new Node(name, parent));
+    return new Node(std::move(name), parent);
 }
 
 void Node::deleteForce()
 {
-    if (!parent_)
-    {
-        SharedPtr<Node>(this); // TODO: do something better? or change architecture of node management
-        return;
-    }
+    setParent(nullptr);
 
-    for (int i = 0; i < parent_->getNumChildren(); ++i)
+    while (!children_.empty())
+        children_[children_.size() - 1]->deleteForce();
+
+    all_nodes_.erase(NodePtr(this));
+}
+
+std::vector<Node*> Node::getAllNodes()
+{
+    std::vector<Node*> nodes;
+    for (const auto& node : all_nodes_)
     {
-        if (parent_->getChild(i) == this)
-        {
-            parent_->removeChild(i);
-            return;
-        }
+        nodes.push_back(node.get());
     }
+    return nodes;
 }

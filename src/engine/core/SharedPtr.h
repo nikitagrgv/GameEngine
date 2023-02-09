@@ -9,6 +9,11 @@ template<class T>
 class SharedPtr
 {
 public:
+    struct Hash
+    {
+        size_t operator()(const SharedPtr& p) const { return std::hash<void*>()(p.object_); }
+    };
+
     explicit SharedPtr() noexcept
         : object_(nullptr)
     {
